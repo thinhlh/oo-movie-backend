@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 # Specify the version, it must be identical and same as version inside pom.xml
-version = "0.0.0"
+# There is no space when assigning value
+version="0.0.0"
 
 #while getopts "v:" flag; do
 #    case "${flag}" in
@@ -20,7 +21,7 @@ echo "Deleted target folder"
 
 echo "====================================== Generating jar file ======================================"
 echo ""
-./mvnw ./mvnw versions:set -DnewVersion="$version"
+./mvnw versions:set -DnewVersion="$version"
 ./mvnw package
 echo '''
     ||=======================||
