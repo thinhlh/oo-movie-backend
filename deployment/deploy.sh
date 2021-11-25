@@ -1,22 +1,26 @@
 #!/usr/bin/env bash
 
-while getopts "v:" flag; do
-    case "${flag}" in
-        # k) key-path=${OPTARG};;
-        # l) local-path=${OPTARG};;
-        # r) remote-path=${OPTARG};;
-        # u) username=${OPTARG};;
-        # n) filename=${OPTARG};;
-        v) version=${OPTARG}
-        ;;
-    esac
-done
+# Specify the version, it must be identical and same as version inside pom.xml
+version = "0.0.0"
+
+#while getopts "v:" flag; do
+#    case "${flag}" in
+#        # k) key-path=${OPTARG};;
+#        # l) local-path=${OPTARG};;
+#        # r) remote-path=${OPTARG};;
+#        # u) username=${OPTARG};;
+#        # n) filename=${OPTARG};;
+#        v) version=${OPTARG}
+#        ;;
+#    esac
+#done
 
 rm -rf ./target/
 echo "Deleted target folder"
 
 echo "====================================== Generating jar file ======================================"
 echo ""
+./mvnw ./mvnw versions:set -DnewVersion='$version'
 ./mvnw package
 echo '''
     ||=======================||
