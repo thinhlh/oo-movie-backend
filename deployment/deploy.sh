@@ -20,7 +20,7 @@ echo "Deleted target folder"
 
 echo "====================================== Generating jar file ======================================"
 echo ""
-./mvnw ./mvnw versions:set -DnewVersion='$version'
+./mvnw ./mvnw versions:set -DnewVersion="$version"
 ./mvnw package
 echo '''
     ||=======================||
