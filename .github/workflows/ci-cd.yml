@@ -27,7 +27,7 @@ jobs:
 
       # Deploy to AWS using shell
       - name: Deploy to AWS
-        run: ./deployment/deploy.sh -v release
+        run: ./deployment/deploy.sh
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
