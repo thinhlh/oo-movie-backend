@@ -44,5 +44,5 @@ echo "Copied jar file from local machine to ec2 instance"
 chmod 400 ./deployment/aws-oomovie.pem
 
 echo "Connecting to ec2 instance and starting server using java -jar command"
-ssh -i "./deployment/aws-oomovie.pem" -o "StrictHostKeyChecking no" ec2-user@ec2-13-251-81-100.ap-southeast-1.compute.amazonaws.com ./server/execute_commands_on_ec2.sh "./server/Movie-${version}-SNAPSHOT.jar"
+ssh -i "./deployment/aws-oomovie.pem" -o StrictHostKeyChecking=no ec2-user@ec2-13-251-81-100.ap-southeast-1.compute.amazonaws.com ./server/execute_commands_on_ec2.sh "./server/Movie-${version}-SNAPSHOT.jar"
 echo "============ Connecting to ec2 instance succeed ============"
