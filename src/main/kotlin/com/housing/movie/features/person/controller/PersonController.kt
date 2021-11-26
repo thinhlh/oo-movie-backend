@@ -24,9 +24,9 @@ class PersonController {
         return getAllPersonUseCase()
     }
 
-    @GetMapping("/hello")
+    @GetMapping("/ping")
     fun hello(): String {
-        return "Hello world"
+        return "Connection succeed!"
     }
 
     @GetMapping("/person")

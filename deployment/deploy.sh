@@ -2,7 +2,7 @@
 
 # Specify the version, it must be identical and same as version inside pom.xml
 # There is no space when assigning value
-version="0.0.0"
+version="0.0.1"
 
 #while getopts "v:" flag; do
 #    case "${flag}" in
@@ -21,7 +21,7 @@ echo "Deleted target folder"
 
 echo "====================================== Generating jar file ======================================"
 echo ""
-./mvnw versions:set -DnewVersion="$version"
+./mvnw versions:set -DnewVersion="$version-SNAPSHOT"
 ./mvnw package
 echo '''
     ||=======================||
@@ -42,6 +42,7 @@ echo "Copied jar file from local machine to ec2 instance"
 
 # Limited the permission and public of file
 chmod 400 ./deployment/aws-oomovie.pem
+echo "Changed the publicy of key"
 
 echo "Connecting to ec2 instance and starting server using java -jar command"
 ssh -i "./deployment/aws-oomovie.pem" -o StrictHostKeyChecking=no ec2-user@ec2-13-251-81-100.ap-southeast-1.compute.amazonaws.com ./server/execute_commands_on_ec2.sh "./server/Movie-${version}-SNAPSHOT.jar"
