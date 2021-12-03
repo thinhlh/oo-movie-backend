@@ -19,8 +19,8 @@ class MovieServiceImpl(
 ) : MovieService {
 
     companion object {
-        const val MOVIE_NOT_FOUND = "Movie Not Found"
-        const val MOVIE_REMOVED = "Movie Removed"
+        const val MOVIE_NOT_FOUND = "Movie not found"
+        const val MOVIE_REMOVED = "Movie removed"
     }
 
     override fun getAllMovies(): List<Movie> {

@@ -1,13 +1,9 @@
 package com.housing.movie.base
 
-import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
-import com.housing.movie.exceptions.NotFoundException
-import com.housing.movie.exceptions.ObjectDisabledException
-import com.housing.movie.exceptions.ObjectExistsException
+import com.housing.movie.exceptions.*
 import org.springframework.beans.TypeMismatchException
-import org.springframework.boot.json.JsonParseException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -19,19 +15,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
-import kotlin.math.log
 
 
 /**
  * Current exceptions that are handled:
+ * @exception ConversionException
  * @exception HttpMessageNotReadableException
  * @exception HttpRequestMethodNotSupportedException
  * @exception MethodArgumentNotValidException
  * @exception MissingServletRequestParameterException
  * @exception MissingKotlinParameterException
  * @exception NotFoundException
- * @exception ObjectExistsException
+ * @exception ObjectAlreadyExistsException
  * @exception ObjectDisabledException
+ * @exception ResourceHandlingException
  * @exception TypeMismatchException
  * */
 @RestControllerAdvice
@@ -117,12 +114,12 @@ class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
     }
 
-    @ExceptionHandler(ObjectExistsException::class)
+    @ExceptionHandler(ObjectAlreadyExistsException::class)
     private fun objectExistsException(
-        exception: ObjectExistsException,
+        exceptionAlready: ObjectAlreadyExistsException,
         request: WebRequest
     ): ResponseEntity<BaseResponse<String>> {
-        val errorResponse = BaseResponse.error(exception.message.toString())
+        val errorResponse = BaseResponse.error(exceptionAlready.message.toString())
 
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
@@ -149,7 +146,7 @@ class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
 
-    @ExceptionHandler(Exception::class)
+    @ExceptionHandler(value = [ConversionException::class, ResourceHandlingException::class, Exception::class])
     fun handleDefaultExceptions(exception: java.lang.Exception, request: WebRequest): ResponseEntity<Any> {
         val errorResponse = BaseResponse.error(exception.message.toString())
 

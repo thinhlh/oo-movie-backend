@@ -1,7 +1,7 @@
 package com.housing.movie.features.genre.data.service
 
 import com.housing.movie.exceptions.NotFoundException
-import com.housing.movie.exceptions.ObjectExistsException
+import com.housing.movie.exceptions.ObjectAlreadyExistsException
 import com.housing.movie.features.genre.data.repository.GenreRepository
 import com.housing.movie.features.genre.domain.entity.Genre
 import com.housing.movie.features.genre.domain.service.GenreService
@@ -28,7 +28,7 @@ class GenreServiceImpl(
     override fun createGenre(createGenreRequest: CreateGenreRequest): Genre {
         if (genreRepository.existsGenreByTitle(createGenreRequest.title)) {
             // Already exists
-            throw ObjectExistsException(message = GENRE_TITLE_EXISTS.format(createGenreRequest.title))
+            throw ObjectAlreadyExistsException(message = GENRE_TITLE_EXISTS.format(createGenreRequest.title))
         } else {
             val genre = createGenreRequest.toGenre()
             genreRepository.save(genre)
@@ -62,7 +62,7 @@ class GenreServiceImpl(
         val genre: Genre = checkGenreExists(genreRepository.getGenreById(id))
         if (genreRepository.existsGenreByTitle(title)) {
             // Already exists
-            throw ObjectExistsException(message = GENRE_TITLE_EXISTS.format(title))
+            throw ObjectAlreadyExistsException(message = GENRE_TITLE_EXISTS.format(title))
         }
         genre.title = title
 

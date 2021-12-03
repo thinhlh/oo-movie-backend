@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Tag(name = "Common", description = "Common APIs")
 class CommonController : BaseController() {
+
+
     @GetMapping("/ping")
     @ApiResponse(responseCode = "200", description = "Succeed")
     fun ping(): ResponseEntity<BaseResponse<String>> {
