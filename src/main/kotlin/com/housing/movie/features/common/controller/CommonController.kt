@@ -1,4 +1,4 @@
-package com.housing.movie.features.common.entity.controller
+package com.housing.movie.features.common.controller
 
 import com.housing.movie.base.BaseController
 import com.housing.movie.base.BaseResponse

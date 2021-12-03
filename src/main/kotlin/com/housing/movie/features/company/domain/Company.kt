@@ -7,28 +7,30 @@ import javax.persistence.*
 
 @Entity
 class Company(
-        @Id
-        @GeneratedValue
-        var id: UUID = UUID.randomUUID(),
 
-        var name: String? = null,
-        var logoPath: String? = null,
-        var originCountry: String? = null,
+    @Id
+    @GeneratedValue
+    val id: UUID = UUID.randomUUID(),
 
-        @ManyToOne
-        var parentCompany: Company? = null,
+    var name: String = "",
+    var logoPath: String = "",
+    var originCountry: String = "",
 
-        @OneToMany(mappedBy = "parentCompany")
-        var childrenCompany: List<Company>? = null,
+    @ManyToOne
+    var parentCompany: Company? = null,
 
-        var description: String? = null,
+    @OneToMany(mappedBy = "parentCompany")
+    var childrenCompany: List<Company> = emptyList(),
 
-        var homepage: String? = null,
+    var description: String = "",
 
-        var headquarters: String? = null,
+    var homepage: String = "",
 
-        var enabled: Boolean = true,
+    var headquarters: String = "",
 
-        @ManyToMany(mappedBy = "companies")
-        var producedMovies: List<Movie>? = null
+    @ManyToMany(mappedBy = "companies")
+    var producedMovies: List<Movie> = emptyList(),
+
+    var enabled: Boolean = true
+
 )

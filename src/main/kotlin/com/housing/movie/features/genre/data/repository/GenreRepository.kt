@@ -10,4 +10,7 @@ interface GenreRepository : CrudRepository<Genre, UUID> {
     fun getAllByEnabledIsTrue(): List<Genre>
 
     fun existsGenreByTitle(title: String): Boolean
+
+    fun getGenreById(id: UUID): Genre?
+
 }

@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration
 class MovieConfiguration {
     @Bean
     fun initMovies(movieRepository: MovieRepository) = CommandLineRunner { args ->
-        movieRepository.save(Movie(title = "Luca"))
-        movieRepository.save(Movie(title = "Arcane"))
+
     }
 }

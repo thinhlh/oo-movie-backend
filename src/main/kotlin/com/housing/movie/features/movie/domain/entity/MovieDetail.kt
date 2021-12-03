@@ -2,44 +2,47 @@ package com.housing.movie.features.movie.domain.entity
 
 import java.util.*
 import javax.persistence.*
+import javax.validation.constraints.NotBlank
 
 @Entity
 class MovieDetail(
-        @Id
-        @GeneratedValue
-        val id: UUID = UUID.randomUUID(),
 
-        @OneToOne(mappedBy = "movieDetail")
-        val movie: Movie? = null,
+    @Id
+    @GeneratedValue
+    val id: UUID = UUID.randomUUID(),
 
-        val adult: Boolean = true,
+    @OneToOne(mappedBy = "movieDetail")
+    val movie: Movie? = null,
 
-        val backdrop_path: String? = null,
+    val adult: Boolean = true,
 
-        val budget: Int? = null,
+    val backdrop_path: String = "",
 
-        val homepage: String? = null,
+    val budget: Int = 0,
 
-        val originalLanguage: String? = null,
+    val homepage: String = "",
 
-        val originalTitle: String? = null,
+    val originalLanguage: String = "",
 
-        val overview: String? = null,
+    val originalTitle: String = "",
 
-        val posterPath: String? = null,
+    val overview: String = "",
 
-        @Temporal(TemporalType.DATE)
-        val releaseDate: Calendar? = null,
+    val posterPath: String = "",
 
-        val revenue: Long? = null,
+    @Temporal(TemporalType.DATE)
+    val releaseDate: Calendar? = null,
 
-        val title: String? = null,
+    val revenue: Long = 0,
 
-        val voteAverage: Long? = null,
+    @NotBlank
+    val title: String = "",
 
-        val voteCount: Long? = null,
+    val voteAverage: Long = 0,
 
-        val likeCount: Long? = null,
+    val voteCount: Long = 0,
 
-        val viewCount: Long? = null
+    val likeCount: Long = 0,
+
+    val viewCount: Long = 0
 )
