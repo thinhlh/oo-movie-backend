@@ -16,7 +16,7 @@ class GenreServiceImpl(
 ) : GenreService {
 
     companion object {
-        const val GENRE_TITLE_EXISTS = "There is another genre with title %s"
+        const val GENRE_NAME_EXISTS = "There is another genre with name %s"
         const val GENRE_NOT_EXISTS = "The given genre has been removed"
         const val GENRE_NOT_FOUND = "There is no genre"
     }
@@ -26,9 +26,9 @@ class GenreServiceImpl(
     }
 
     override fun createGenre(createGenreRequest: CreateGenreRequest): Genre {
-        if (genreRepository.existsGenreByTitle(createGenreRequest.title)) {
+        if (genreRepository.existsGenreByName(createGenreRequest.name)) {
             // Already exists
-            throw ObjectAlreadyExistsException(message = GENRE_TITLE_EXISTS.format(createGenreRequest.title))
+            throw ObjectAlreadyExistsException(message = GENRE_NAME_EXISTS.format(createGenreRequest.name))
         } else {
             val genre = createGenreRequest.toGenre()
             genreRepository.save(genre)
@@ -58,13 +58,13 @@ class GenreServiceImpl(
     }
 
     @Transactional
-    override fun updateGenreTitle(id: UUID, title: String): Genre {
+    override fun updateGenreTitle(id: UUID, name: String): Genre {
         val genre: Genre = checkGenreExists(genreRepository.getGenreById(id))
-        if (genreRepository.existsGenreByTitle(title)) {
+        if (genreRepository.existsGenreByName(name)) {
             // Already exists
-            throw ObjectAlreadyExistsException(message = GENRE_TITLE_EXISTS.format(title))
+            throw ObjectAlreadyExistsException(message = GENRE_NAME_EXISTS.format(name))
         }
-        genre.title = title
+        genre.name = name
 
         return genre
     }

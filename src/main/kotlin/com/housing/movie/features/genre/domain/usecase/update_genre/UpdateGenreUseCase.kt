@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component
 class UpdateGenreUseCase(private val genreService: GenreService) : BaseUseCase {
     override fun invoke(data: Any?): Genre {
         val updateGenreRequest = data as UpdateGenreRequest
-        return genreService.updateGenreTitle(updateGenreRequest.id, updateGenreRequest.title)
+        return genreService.updateGenreTitle(updateGenreRequest.id, updateGenreRequest.name)
     }
 }

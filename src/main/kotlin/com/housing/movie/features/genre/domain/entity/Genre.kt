@@ -20,7 +20,7 @@ class Genre(
     val id: UUID = UUID.randomUUID(),
 
     @NotBlank
-    var title: String = "",
+    var name: String = "",
 
     var enabled: Boolean = true,
 

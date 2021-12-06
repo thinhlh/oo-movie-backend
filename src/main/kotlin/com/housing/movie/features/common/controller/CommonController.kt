@@ -18,4 +18,10 @@ class CommonController : BaseController() {
     fun ping(): ResponseEntity<BaseResponse<String>> {
         return successResponse.body(BaseResponse.success("Succeed"))
     }
+
+    @GetMapping("/")
+    @ApiResponse(responseCode = "200", description = "Succeed")
+    fun info(): ResponseEntity<BaseResponse<String>> {
+        return successResponse.body(BaseResponse.success("Housing Movie Application"))
+    }
 }

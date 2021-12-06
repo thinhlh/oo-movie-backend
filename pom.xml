@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.housing</groupId>
     <artifactId>Movie</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>Housing Movie</name>
     <description>Demo project for Spring Boot</description>
     <properties>
@@ -81,11 +81,11 @@
             <version>1.5.2</version>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-config</artifactId>-->
-<!--            <version>3.0.5</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-starter-config</artifactId>-->
+        <!--            <version>3.0.5</version>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>com.amazonaws</groupId>
@@ -131,6 +131,7 @@
                 </dependencies>
             </plugin>
         </plugins>
+        <finalName>housing-movie</finalName>
     </build>
 
 </project>

@@ -2,7 +2,7 @@
 
 # Specify the version, it must be identical and same as version inside pom.xml
 # There is no space when assigning value
-version="0.0.3"
+version="0.0.1"
 
 #while getopts "v:" flag; do
 #    case "${flag}" in

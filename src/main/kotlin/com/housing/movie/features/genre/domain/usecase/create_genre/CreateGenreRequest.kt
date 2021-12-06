@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull
 
 data class CreateGenreRequest(
         @NotNull
-        val title: String
+        val name: String
 ) {
-    fun toGenre(): Genre = Genre(title = title)
+    fun toGenre(): Genre = Genre(name = name)
 }

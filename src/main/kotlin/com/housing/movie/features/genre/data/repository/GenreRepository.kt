@@ -9,7 +9,7 @@ import java.util.*
 interface GenreRepository : CrudRepository<Genre, UUID> {
     fun getAllByEnabledIsTrue(): List<Genre>
 
-    fun existsGenreByTitle(title: String): Boolean
+    fun existsGenreByName(title: String): Boolean
 
     fun getGenreById(id: UUID): Genre?
 

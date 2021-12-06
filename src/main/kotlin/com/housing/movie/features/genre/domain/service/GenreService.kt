@@ -13,5 +13,5 @@ interface GenreService {
 
     fun redoDeleteGenre(id: UUID): Boolean
 
-    fun updateGenreTitle(id: UUID, title: String): Genre
+    fun updateGenreTitle(id: UUID, name: String): Genre
 }
