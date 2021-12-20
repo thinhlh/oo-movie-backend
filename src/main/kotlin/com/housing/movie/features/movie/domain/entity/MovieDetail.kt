@@ -1,5 +1,6 @@
 package com.housing.movie.features.movie.domain.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -11,6 +12,7 @@ class MovieDetail(
     @GeneratedValue
     val id: UUID = UUID.randomUUID(),
 
+    @JsonIgnore
     @OneToOne(mappedBy = "movieDetail")
     val movie: Movie? = null,
 

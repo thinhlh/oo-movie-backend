@@ -9,8 +9,10 @@ import java.util.*
 interface GenreRepository : CrudRepository<Genre, UUID> {
     fun getAllByEnabledIsTrue(): List<Genre>
 
-    fun existsGenreByName(title: String): Boolean
+    fun existsByName(name: String): Boolean
 
     fun getGenreById(id: UUID): Genre?
+
+    fun getGenresByIdIsIn(ids: List<UUID>): List<Genre>
 
 }

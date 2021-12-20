@@ -25,6 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * @exception MethodArgumentNotValidException
  * @exception MissingServletRequestParameterException
  * @exception MissingKotlinParameterException
+ * @exception MissingPropertyException
  * @exception NotFoundException
  * @exception ObjectAlreadyExistsException
  * @exception ObjectDisabledException
@@ -100,6 +101,16 @@ class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         request: WebRequest
     ): ResponseEntity<Any> {
         val errorResponse = BaseResponse(false, "Missing parameter '${ex.parameterName}' ", null)
+
+        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(MissingPropertyException::class)
+    private fun missingProperty(
+        exception: MissingPropertyException,
+        request: WebRequest
+    ): ResponseEntity<BaseResponse<String>> {
+        val errorResponse = BaseResponse.error(exception.message ?: "Missing property")
 
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }

@@ -26,7 +26,7 @@ class Genre(
 
     @ManyToMany(mappedBy = "genres")
     @JsonIgnore
-    val movies: List<Movie> = emptyList()
+    var movies: List<Movie> = mutableListOf()
 
 )
 

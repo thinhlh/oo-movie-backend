@@ -1,4 +1,4 @@
-package com.housing.movie.features.genre.domain.usecase.delete_genre
+package com.housing.movie.features.genre.domain.usecase
 
 import com.housing.movie.base.BaseUseCase
 import com.housing.movie.features.genre.domain.service.GenreService
@@ -9,6 +9,6 @@ import java.util.*
 class DeleteGenreUseCase(private val genreService: GenreService) : BaseUseCase {
 
     override fun invoke(data: Any?): Boolean {
-        return genreService.deleteGenre((data as DeleteGenreRequest).id)
+        return genreService.deleteGenre(data as UUID)
     }
 }

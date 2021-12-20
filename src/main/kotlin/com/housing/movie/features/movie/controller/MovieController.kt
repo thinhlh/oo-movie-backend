@@ -3,12 +3,13 @@ package com.housing.movie.features.movie.controller
 import com.housing.movie.base.BaseController
 import com.housing.movie.base.BaseResponse
 import com.housing.movie.features.movie.domain.entity.Movie
+import com.housing.movie.features.movie.domain.usecase.*
 import com.housing.movie.features.movie.domain.usecase.assign_tags_to_movie.AssignGenresToMovieUseCase
-import com.housing.movie.features.movie.domain.usecase.GetAllMoviesUseCase
-import com.housing.movie.features.movie.domain.usecase.GetMovieByIdUseCase
-import com.housing.movie.features.movie.domain.usecase.GetMovieByTitleUseCase
-import com.housing.movie.features.movie.domain.usecase.GetMoviesByGenreUseCase
 import com.housing.movie.features.movie.domain.usecase.assign_tags_to_movie.AssignGenresToMovieRequest
+import com.housing.movie.features.movie.domain.usecase.create_movie.CreateMovieRequest
+import com.housing.movie.features.movie.domain.usecase.create_movie.CreateMovieUseCase
+import com.housing.movie.features.movie.domain.usecase.update_movie.UpdateMovieRequest
+import com.housing.movie.features.movie.domain.usecase.update_movie.UpdateMovieUseCase
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -26,6 +27,10 @@ class MovieController(
     private val getMovieByIdUseCase: GetMovieByIdUseCase,
     private val assignGenresToMovieUseCase: AssignGenresToMovieUseCase,
     private val getMoviesByGenreUseCase: GetMoviesByGenreUseCase,
+    private val deleteMovieUseCase: DeleteMovieUseCase,
+    private val enableMovieUseCase: EnableMovieUseCase,
+    private val createMovieUseCase: CreateMovieUseCase,
+    private val updateMovieUseCase: UpdateMovieUseCase,
 ) : BaseController() {
 
     @GetMapping("/movies")
@@ -64,5 +69,25 @@ class MovieController(
     @GetMapping("/movies/genre")
     fun getMoviesByGenre(@RequestParam genreId: UUID): ResponseEntity<BaseResponse<List<Movie>>> {
         return successResponse.body(BaseResponse.success(getMoviesByGenreUseCase(genreId)))
+    }
+
+    @DeleteMapping("/movie")
+    fun deleteMovie(@RequestParam id: UUID): ResponseEntity<BaseResponse<Boolean>> {
+        return ResponseEntity.ok(BaseResponse.success(deleteMovieUseCase(id)))
+    }
+
+    @PutMapping("/movie/enable")
+    fun redoDeleteMovie(@RequestParam id: UUID): ResponseEntity<BaseResponse<Movie>> {
+        return ResponseEntity.ok(BaseResponse.success(enableMovieUseCase(id)))
+    }
+
+    @PostMapping("/movie")
+    fun createMovie(@RequestBody @Valid createMovieRequest: CreateMovieRequest): ResponseEntity<BaseResponse<Movie>> {
+        return ResponseEntity.ok(BaseResponse.success(createMovieUseCase(createMovieRequest)))
+    }
+
+    @PutMapping("/movie")
+    fun updateMovie(@RequestBody @Valid updateMovieRequest: UpdateMovieRequest): ResponseEntity<BaseResponse<Movie>> {
+        return ResponseEntity.ok(BaseResponse.success(updateMovieUseCase(updateMovieRequest)))
     }
 }

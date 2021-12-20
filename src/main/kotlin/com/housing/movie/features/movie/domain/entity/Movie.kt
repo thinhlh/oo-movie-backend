@@ -25,7 +25,7 @@ class Movie(
         inverseJoinColumns = [JoinColumn(name = "genre_id")]
     )
 
-    var genres: List<Genre>? = emptyList(),
+    var genres: List<Genre>? = mutableListOf(),
 
     @ManyToMany
     @JoinTable(

@@ -26,7 +26,7 @@ class GenreServiceImpl(
     }
 
     override fun createGenre(createGenreRequest: CreateGenreRequest): Genre {
-        if (genreRepository.existsGenreByName(createGenreRequest.name)) {
+        if (genreRepository.existsByName(createGenreRequest.name)) {
             // Already exists
             throw ObjectAlreadyExistsException(message = GENRE_NAME_EXISTS.format(createGenreRequest.name))
         } else {
@@ -42,7 +42,7 @@ class GenreServiceImpl(
     }
 
     @Transactional
-    override fun redoDeleteGenre(id: UUID): Boolean {
+    override fun enableGenre(id: UUID): Boolean {
         return updateGenreVisibility(id, true)
     }
 
@@ -60,7 +60,7 @@ class GenreServiceImpl(
     @Transactional
     override fun updateGenreTitle(id: UUID, name: String): Genre {
         val genre: Genre = checkGenreExists(genreRepository.getGenreById(id))
-        if (genreRepository.existsGenreByName(name)) {
+        if (genreRepository.existsByName(name)) {
             // Already exists
             throw ObjectAlreadyExistsException(message = GENRE_NAME_EXISTS.format(name))
         }
