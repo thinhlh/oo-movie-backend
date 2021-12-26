@@ -21,7 +21,7 @@ class FirebaseConfig {
     @Bean
     fun bucket(): Storage {
         val serviceAccount =
-            this.javaClass.getResourceAsStream("./../../../../housing-movie-firebase-adminsdk-fzmgo-9417fad6c5.json")
+            FileInputStream("src/main/resources/housing-movie-firebase-adminsdk-fzmgo-9417fad6c5.json")
 
         val options = FirebaseOptions
             .builder()
