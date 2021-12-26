@@ -10,7 +10,7 @@ import javax.persistence.*
 @Entity
 class Person(
         @Id
-        @Generated
+        @GeneratedValue
         val id: UUID = UUID.randomUUID(),
 
         @Temporal(TemporalType.DATE)
