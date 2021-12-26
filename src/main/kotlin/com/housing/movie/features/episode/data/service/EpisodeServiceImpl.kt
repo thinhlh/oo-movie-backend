@@ -7,10 +7,14 @@ import com.housing.movie.exceptions.ObjectAlreadyExistsException
 import com.housing.movie.features.episode.data.repository.EpisodeRepository
 import com.housing.movie.features.episode.domain.service.EpisodeService
 import com.housing.movie.features.episode.domain.usecase.create_episode.CreateEpisodeRequest
+import com.housing.movie.features.episode.domain.usecase.update_episode.UpdateEpisodeRequest
 import com.housing.movie.features.movie.data.repository.MovieRepository
 import com.housing.movie.features.movie.domain.entity.Episode
 import com.housing.movie.features.movie.domain.entity.Movie
+import org.aspectj.weaver.ast.Not
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 
@@ -51,6 +55,45 @@ class EpisodeServiceImpl(
         movie.episodes.add(episode)
         episodeRepository.save(episode)
 
+
+        return episode
+    }
+
+    @Transactional
+    override fun updateEpisode(updateEpisodeRequest: UpdateEpisodeRequest): Episode {
+
+        val currentEpisode =
+            episodeRepository.findByIdOrNull(updateEpisodeRequest.id) ?: throw NotFoundException(EPISODE_NOT_FOUND)
+
+        val newEpisode = updateEpisodeRequest.updateEpisode(currentEpisode)
+
+        val movieId: UUID? = currentEpisode.movie?.id
+
+        val movie: Movie = movieId?.let {
+            movieRepository.findByIdOrNull(it)
+        } ?: throw NotFoundException(MOVIE_NOT_FOUND)
+
+        newEpisode.movie = movie
+
+        episodeRepository.save(newEpisode)
+
+        return newEpisode
+
+    }
+
+    @Transactional
+    override fun deleteEpisode(id: UUID): Boolean {
+        val episode = episodeRepository.findByIdOrNull(id) ?: throw NotFoundException(EPISODE_NOT_FOUND)
+
+        episode.enabled = false
+
+        return true
+    }
+
+    override fun enableEpisode(id: UUID): Episode {
+        val episode = episodeRepository.findByIdOrNull(id) ?: throw NotFoundException(EPISODE_NOT_FOUND)
+
+        episode.enabled = true
 
         return episode
     }

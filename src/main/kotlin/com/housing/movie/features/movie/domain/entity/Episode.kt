@@ -16,9 +16,9 @@ class Episode(
     @JoinColumn(name = "movie_id")
     var movie: Movie? = null,
 
-    val name: String = "",
-    val content: String = "",
-    val ordinal: Int = 0,
+    var name: String = "",
+    var content: String = "",
+    var ordinal: Int = 0,
     var viewCount: Int = 0,
     var enabled: Boolean = true,
 )
