@@ -15,4 +15,6 @@ interface MovieRepository : CrudRepository<Movie, UUID> {
 
     fun getMoviesByIdAndEnabledIsTrue(id: UUID): Movie?
 
+    fun getMovieById(id: UUID): Movie?
+
 }
