@@ -1,10 +1,7 @@
 package com.housing.movie.features.person.domain
 
 //import com.housing.movie.features.common.entity.movie_person.MoviePerson
-import com.housing.movie.features.movie.domain.entity.Movie
-import java.time.LocalDate
 import java.util.*
-import javax.annotation.processing.Generated
 import javax.persistence.*
 
 @Entity
