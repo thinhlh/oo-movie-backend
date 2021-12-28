@@ -9,4 +9,6 @@ import java.util.*
 interface EpisodeRepository : CrudRepository<Episode, UUID> {
 
     fun getByIdAndEnabledIsTrue(id: UUID): Episode?
+
+    fun getByMovieId(id: UUID): List<Episode>
 }

@@ -2,6 +2,7 @@ package com.housing.movie.features.episode.domain.entity
 
 import com.housing.movie.base.BaseController
 import com.housing.movie.base.BaseResponse
+import com.housing.movie.features.episode.data.repository.EpisodeRepository
 import com.housing.movie.features.episode.domain.usecase.DeleteEpisodeUseCase
 import com.housing.movie.features.episode.domain.usecase.EnableEpisodeUseCase
 import com.housing.movie.features.episode.domain.usecase.GetEpisodeUseCase
@@ -23,6 +24,7 @@ class EpisodeController(
     private val updateEpisodeUseCase: UpdateEpisodeUseCase,
     private val deleteEpisodeUseCase: DeleteEpisodeUseCase,
     private val enableEpisodeUseCase: EnableEpisodeUseCase,
+    private val repository: EpisodeRepository,
 ) : BaseController() {
 
     @GetMapping("/episode")
@@ -48,5 +50,10 @@ class EpisodeController(
     @PutMapping("/episode/enable")
     fun enableEpisode(@RequestParam id: UUID): ResponseEntity<BaseResponse<Episode>> {
         return ResponseEntity.ok(BaseResponse.success(enableEpisodeUseCase(id)))
+    }
+
+    @GetMapping("/episodes")
+    fun getEpisodeById(@RequestParam movieId: UUID): ResponseEntity<BaseResponse<List<Episode>>> {
+        return ResponseEntity.ok(BaseResponse.success(repository.getByMovieId(movieId)))
     }
 }
