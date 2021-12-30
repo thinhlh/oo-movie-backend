@@ -7,6 +7,8 @@ import javax.validation.constraints.NotBlank
 
 data class CreateMovieRequest(
 
+    val id: UUID? = null,
+
     val adult: Boolean = true,
 
     val backdrop_path: String = "",
@@ -38,7 +40,9 @@ data class CreateMovieRequest(
 
     val viewCount: Long = 0,
 
-    val genreIds: List<UUID> = mutableListOf()
+    val genreIds: List<UUID> = mutableListOf(),
+
+    val isTVSeries: Boolean = false
 
 ) {
     fun toMovieDetail(): MovieDetail {
@@ -57,7 +61,8 @@ data class CreateMovieRequest(
             voteAverage = voteAverage,
             voteCount = voteCount,
             likeCount = likeCount,
-            viewCount = viewCount
+            viewCount = viewCount,
+            isTVSeries = isTVSeries
         )
     }
 }

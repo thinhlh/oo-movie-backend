@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
+import kotlin.jvm.Transient
 
 @Entity
 class MovieDetail(
@@ -46,5 +47,11 @@ class MovieDetail(
 
     val likeCount: Long = 0,
 
-    val viewCount: Long = 0
+    val viewCount: Long = 0,
+
+    @Column(name = "is_tv_series")
+    var isTVSeries: Boolean = false,
+
+    @Transient
+    val isMine: Boolean = true
 )

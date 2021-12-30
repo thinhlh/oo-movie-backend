@@ -47,7 +47,9 @@ data class UpdateMovieRequest(
 
     val viewCount: Long? = null,
 
-    val genreIds: List<UUID>? = null
+    val genreIds: List<UUID>? = null,
+
+    val isTVSeries: Boolean? = null,
 ) {
     fun toMovieDetail(currentMovieDetail: MovieDetail?): MovieDetail {
 
@@ -68,7 +70,8 @@ data class UpdateMovieRequest(
                     voteAverage = voteAverage!!,
                     voteCount = voteCount!!,
                     likeCount = likeCount!!,
-                    viewCount = viewCount!!
+                    viewCount = viewCount!!,
+                    isTVSeries = isTVSeries!!
                 )
             }
         } catch (e: NullPointerException) {
@@ -92,7 +95,8 @@ data class UpdateMovieRequest(
             voteAverage = voteAverage ?: currentMovieDetail.voteAverage,
             voteCount = voteCount ?: currentMovieDetail.voteCount,
             likeCount = likeCount ?: currentMovieDetail.likeCount,
-            viewCount = viewCount ?: currentMovieDetail.viewCount
+            viewCount = viewCount ?: currentMovieDetail.viewCount,
+            isTVSeries = isTVSeries ?: currentMovieDetail.isTVSeries,
         )
     }
 }

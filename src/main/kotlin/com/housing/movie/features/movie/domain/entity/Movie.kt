@@ -13,11 +13,11 @@ import javax.validation.constraints.NotBlank
 
 
 @Entity
-//@JsonSerialize(using = MovieSerializer::class)
+@JsonSerialize(using = MovieSerializer::class)
 class Movie(
     @Id
     @GeneratedValue
-    val id: UUID = UUID.randomUUID(),
+    var id: UUID = UUID.randomUUID(),
 
     @NotBlank
     var title: String = "",

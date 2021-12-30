@@ -36,14 +36,40 @@ class MovieSerializer(
         jsonGenerator?.let {
             jsonGenerator.writeStartObject()
 
-            val genreIds: Array<String> =
-                movie?.genres?.map { genre -> genre.id.toString() }?.toTypedArray() ?: emptyArray()
+//            val genreIds: Array<String> =
+//                movie?.genres?.map { genre -> genre.id.toString() }?.toTypedArray() ?: emptyArray()
+//
+//            jsonGenerator.writeFieldName("genreIds")
+//            jsonGenerator.writeArray(genreIds, 0, genreIds.size)
+//
+//            jsonGenerator.writeFieldName("detail")
+//            defaultSerializer?.serialize(movie, jsonGenerator, serializerProvider)
 
-            jsonGenerator.writeFieldName("genreIds")
-            jsonGenerator.writeArray(genreIds, 0, genreIds.size)
 
-            jsonGenerator.writeFieldName("detail")
-            defaultSerializer?.serialize(movie, jsonGenerator, serializerProvider)
+            it.writeStringField("id", movie?.id.toString())
+            it.writeObjectField("episodes", movie?.episodes)
+            it.writeObjectField("genres", movie?.genres)
+
+
+            val movieDetail = movie?.movieDetail
+            it.writeBooleanField("adult", movieDetail?.adult ?: true)
+            it.writeStringField("back_drop_path", movieDetail?.backdrop_path)
+            it.writeNumberField("budget", movieDetail?.budget ?: 0)
+            it.writeStringField("homepage", movieDetail?.homepage)
+            it.writeStringField("originalLanguage", movieDetail?.originalLanguage)
+            it.writeStringField("originalTitle", movieDetail?.originalTitle)
+            it.writeStringField("overview", movieDetail?.overview)
+            it.writeStringField("posterPath", movieDetail?.posterPath)
+            it.writeObjectField("releaseDate", movieDetail?.releaseDate)
+            it.writeNumberField("revenue", movieDetail?.revenue ?: 0)
+            it.writeStringField("title", movieDetail?.title)
+            it.writeObjectField("voteAverage", movieDetail?.voteAverage)
+            it.writeObjectField("voteCount", movieDetail?.voteCount)
+            it.writeObjectField("viewCount", movieDetail?.viewCount)
+            it.writeBooleanField("isMine", movieDetail?.isMine ?: true)
+            it.writeBooleanField("isTVSeries", movieDetail?.isTVSeries ?: false)
+
+            it.writeBooleanField("enabled", movie?.enabled ?: true)
 
             jsonGenerator.writeEndObject()
         }

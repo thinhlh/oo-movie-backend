@@ -26,7 +26,10 @@ class Genre(
 
     @ManyToMany(mappedBy = "genres")
     @JsonIgnore
-    var movies: List<Movie> = mutableListOf()
+    var movies: List<Movie> = mutableListOf(),
+
+    @Transient
+    val isMine: Boolean = true
 
 )
 

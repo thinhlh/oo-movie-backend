@@ -91,9 +91,10 @@ class MovieServiceImpl(
 
         val movie = Movie()
 
+        movie.id = createMovieRequest.id ?: movie.id
         movie.title = movieDetail.title
         movie.movieDetail = movieDetail
-        movie.genres = movie.genres?.plus(genres)
+        movie.genres = movie.genres.plus(genres)
 
         movieRepository.save(movie)
 
