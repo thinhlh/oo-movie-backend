@@ -51,10 +51,8 @@ class EpisodeServiceImpl(
         episode.movie = movie
 
         movie.episodes.add(episode)
-        episodeRepository.save(episode)
 
-
-        return episode
+        return episodeRepository.save(episode)
     }
 
     @Transactional
