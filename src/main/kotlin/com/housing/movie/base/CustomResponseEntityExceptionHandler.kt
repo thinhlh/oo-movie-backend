@@ -31,6 +31,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * @exception ObjectDisabledException
  * @exception ResourceHandlingException
  * @exception TypeMismatchException
+ * @exception RunOutOfUsageException
  * */
 @RestControllerAdvice
 class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
@@ -162,5 +163,12 @@ class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         val errorResponse = BaseResponse.error(exception.message.toString())
 
         return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @ExceptionHandler(value = [RunOutOfUsageException::class])
+    fun handleRunOfUsageException(exception: RunOutOfUsageException, request: WebRequest): ResponseEntity<Any> {
+        val errorResponse = BaseResponse.error(exception.message.toString())
+
+        return ResponseEntity(errorResponse,HttpStatus.BAD_REQUEST)
     }
 }

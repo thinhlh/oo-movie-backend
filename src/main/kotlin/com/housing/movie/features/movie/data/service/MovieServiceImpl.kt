@@ -39,7 +39,7 @@ class MovieServiceImpl(
 
     override fun getMovieById(id: UUID): Movie {
 
-        return movieRepository.getMoviesByIdAndEnabledIsTrue(id) ?: throw NotFoundException(MOVIE_NOT_FOUND)
+        return movieRepository.getMovieById(id) ?: throw NotFoundException(MOVIE_NOT_FOUND)
 
     }
 
