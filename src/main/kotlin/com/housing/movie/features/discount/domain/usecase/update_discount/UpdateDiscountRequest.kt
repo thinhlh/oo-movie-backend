@@ -1,5 +1,6 @@
 package com.housing.movie.features.discount.domain.usecase.update_discount
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.housing.movie.features.discount.domain.entity.Discount
 import com.housing.movie.utils.DateTimeHelper
 import java.util.*
@@ -15,10 +16,13 @@ data class UpdateDiscountRequest(
 
     var description: String? = null,
 
+    @JsonProperty(value = "remaining_amount")
     var remainingAmount: Int? = null,
 
+    @JsonProperty(value = "time_begin")
     var timeBegin: String? = null,
 
+    @JsonProperty(value = "time_end")
     var timeEnd: String? = null,
 
     var value: Double? = null,

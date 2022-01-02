@@ -1,5 +1,6 @@
 package com.housing.movie.features.discount.domain.entity
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import javax.persistence.*
 
@@ -13,12 +14,15 @@ class Discount(
 
     var description: String = "",
 
+    @JsonProperty(value="remaining_amount")
     var remainingAmount: Int = 0,
 
     @Temporal(value = TemporalType.DATE)
+    @JsonProperty(value = "time_begin")
     var timeBegin: Calendar? = null,
 
     @Temporal(value = TemporalType.DATE)
+    @JsonProperty(value = "time_end")
     var timeEnd: Calendar? = null,
 
     var value: Double = 0.0,

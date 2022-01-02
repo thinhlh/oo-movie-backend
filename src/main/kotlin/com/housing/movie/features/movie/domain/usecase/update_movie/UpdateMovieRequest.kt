@@ -1,5 +1,6 @@
 package com.housing.movie.features.movie.domain.usecase.update_movie
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.housing.movie.exceptions.MissingPropertyException
 import com.housing.movie.features.movie.domain.entity.MovieDetail
@@ -24,14 +25,18 @@ data class UpdateMovieRequest(
 
     val homepage: String? = null,
 
+    @JsonProperty(value = "original_language")
     val originalLanguage: String? = null,
 
+    @JsonProperty(value = "original_title")
     val originalTitle: String? = null,
 
     val overview: String? = null,
 
+    @JsonProperty(value = "poster_path")
     val posterPath: String? = null,
 
+    @JsonProperty(value = "release_date")
     val releaseDate: String? = null,
 
     val revenue: Long? = null,
@@ -39,18 +44,25 @@ data class UpdateMovieRequest(
     @NotBlank
     val title: String? = null,
 
+    @JsonProperty(value = "vote_average")
     val voteAverage: Long? = null,
 
+    @JsonProperty(value = "vote_count")
     val voteCount: Long? = null,
 
+    @JsonProperty(value = "like_count")
     val likeCount: Long? = null,
 
+    @JsonProperty(value = "view_count")
     val viewCount: Long? = null,
 
+    @JsonProperty(value = "genre_ids")
     val genreIds: List<UUID>? = null,
 
+    @JsonProperty(value = "is_tv_series")
     val isTVSeries: Boolean? = null,
 
+    @JsonProperty(value = "movie_id_fake")
     val movieIdFake: String? = null
 ) {
     fun toMovieDetail(currentMovieDetail: MovieDetail?): MovieDetail {

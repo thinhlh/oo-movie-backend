@@ -1,5 +1,6 @@
 package com.housing.movie.features.discount.domain.usecase.create_discount
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.housing.movie.features.discount.domain.entity.Discount
 import com.housing.movie.utils.DateTimeHelper
 import java.util.*
@@ -13,10 +14,13 @@ data class CreateDiscountRequest(
 
     val description: String = "",
 
+    @JsonProperty(value = "remaining_amount")
     val remainingAmount: Int = 0,
 
+    @JsonProperty(value = "time_begin")
     val timeBegin: String = "",
 
+    @JsonProperty(value = "time_end")
     val timeEnd: String = "",
 
     val value: Double = 0.0,
