@@ -2,7 +2,7 @@ package com.housing.movie.features.episode.domain.usecase.update_episode
 
 import com.housing.movie.base.BaseUseCase
 import com.housing.movie.features.episode.domain.service.EpisodeService
-import com.housing.movie.features.movie.domain.entity.Episode
+import com.housing.movie.features.episode.domain.entity.Episode
 import org.springframework.stereotype.Component
 
 @Component

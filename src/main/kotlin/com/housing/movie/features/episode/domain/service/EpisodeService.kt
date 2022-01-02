@@ -2,7 +2,7 @@ package com.housing.movie.features.episode.domain.service
 
 import com.housing.movie.features.episode.domain.usecase.create_episode.CreateEpisodeRequest
 import com.housing.movie.features.episode.domain.usecase.update_episode.UpdateEpisodeRequest
-import com.housing.movie.features.movie.domain.entity.Episode
+import com.housing.movie.features.episode.domain.entity.Episode
 import java.util.*
 
 interface EpisodeService {

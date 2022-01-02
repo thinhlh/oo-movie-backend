@@ -1,4 +1,4 @@
-package com.housing.movie.features.episode.domain.entity
+package com.housing.movie.features.episode.controller
 
 import com.housing.movie.base.BaseController
 import com.housing.movie.base.BaseResponse
@@ -10,7 +10,7 @@ import com.housing.movie.features.episode.domain.usecase.create_episode.CreateEp
 import com.housing.movie.features.episode.domain.usecase.create_episode.CreateEpisodeUseCase
 import com.housing.movie.features.episode.domain.usecase.update_episode.UpdateEpisodeRequest
 import com.housing.movie.features.episode.domain.usecase.update_episode.UpdateEpisodeUseCase
-import com.housing.movie.features.movie.domain.entity.Episode
+import com.housing.movie.features.episode.domain.entity.Episode
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

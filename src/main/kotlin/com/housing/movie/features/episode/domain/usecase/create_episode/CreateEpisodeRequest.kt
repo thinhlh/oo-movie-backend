@@ -1,6 +1,6 @@
 package com.housing.movie.features.episode.domain.usecase.create_episode
 
-import com.housing.movie.features.movie.domain.entity.Episode
+import com.housing.movie.features.episode.domain.entity.Episode
 import java.util.*
 
 data class CreateEpisodeRequest(

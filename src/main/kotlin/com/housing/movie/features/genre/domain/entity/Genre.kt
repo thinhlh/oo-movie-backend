@@ -29,6 +29,7 @@ class Genre(
     var movies: List<Movie> = mutableListOf(),
 
     @Transient
+    @JsonProperty(value = "is_mine")
     val isMine: Boolean = true
 
 )

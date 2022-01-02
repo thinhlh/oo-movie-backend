@@ -1,12 +1,13 @@
 package com.housing.movie.features.movie.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.housing.movie.features.common.entity.movie_person.MoviePerson
 import com.housing.movie.features.common.serializers.MovieSerializer
 import com.housing.movie.features.company.domain.Company
+import com.housing.movie.features.episode.domain.entity.Episode
 import com.housing.movie.features.genre.domain.entity.Genre
-import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -42,10 +43,12 @@ class Movie(
 
     @OneToMany(mappedBy = "movie")
     @JsonIgnore
+    @JsonProperty(value = "movie_people")
     var moviePersons: List<MoviePerson>? = emptyList(),
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "movie_detail_id", referencedColumnName = "id")
+    @JsonProperty(value = "movie_detail")
     var movieDetail: MovieDetail? = null,
 
     @JsonIgnore

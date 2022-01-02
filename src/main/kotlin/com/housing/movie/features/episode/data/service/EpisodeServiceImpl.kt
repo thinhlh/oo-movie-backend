@@ -1,7 +1,5 @@
 package com.housing.movie.features.episode.data.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.module.SimpleModule
 import com.housing.movie.exceptions.NotFoundException
 import com.housing.movie.exceptions.ObjectAlreadyExistsException
 import com.housing.movie.features.episode.data.repository.EpisodeRepository
@@ -9,9 +7,8 @@ import com.housing.movie.features.episode.domain.service.EpisodeService
 import com.housing.movie.features.episode.domain.usecase.create_episode.CreateEpisodeRequest
 import com.housing.movie.features.episode.domain.usecase.update_episode.UpdateEpisodeRequest
 import com.housing.movie.features.movie.data.repository.MovieRepository
-import com.housing.movie.features.movie.domain.entity.Episode
+import com.housing.movie.features.episode.domain.entity.Episode
 import com.housing.movie.features.movie.domain.entity.Movie
-import org.aspectj.weaver.ast.Not
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -31,9 +28,10 @@ class EpisodeServiceImpl(
     }
 
     override fun getEpisode(id: UUID): Episode {
-        return episodeRepository.getByIdAndEnabledIsTrue(id) ?: throw NotFoundException(message = EPISODE_NOT_FOUND)
+        return episodeRepository.findByIdOrNull(id) ?: throw NotFoundException(message = EPISODE_NOT_FOUND)
     }
 
+    @Transactional
     override fun createEpisode(createEpisodeRequest: CreateEpisodeRequest): Episode {
 
         // If movie not exists or episode is already exists => throw error

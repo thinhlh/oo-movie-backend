@@ -1,6 +1,6 @@
 package com.housing.movie.features.episode.domain.usecase.update_episode
 
-import com.housing.movie.features.movie.domain.entity.Episode
+import com.housing.movie.features.episode.domain.entity.Episode
 import java.util.*
 import javax.validation.constraints.NotBlank
 
