@@ -50,6 +50,8 @@ data class UpdateMovieRequest(
     val genreIds: List<UUID>? = null,
 
     val isTVSeries: Boolean? = null,
+
+    val movieIdFake: String? = null
 ) {
     fun toMovieDetail(currentMovieDetail: MovieDetail?): MovieDetail {
 

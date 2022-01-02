@@ -30,7 +30,10 @@ class Genre(
 
     @Transient
     @JsonProperty(value = "is_mine")
-    val isMine: Boolean = true
+    val isMine: Boolean = true,
+
+    @JsonProperty(value = "genre_id_fake")
+    var genreIdFake: String = ""
 
 )
 

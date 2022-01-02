@@ -28,15 +28,18 @@ class MovieServiceImpl(
         const val MOVIE_REMOVED = "Movie removed"
     }
 
+    @Transactional
     override fun getAllMovies(): List<Movie> {
         return movieRepository.getAllByEnabledIsTrue()
     }
 
+    @Transactional
     override fun getMovieByTitle(title: String): Movie {
 
         return movieRepository.getMovieByTitleAndEnabledIsTrue(title) ?: throw NotFoundException(MOVIE_NOT_FOUND)
     }
 
+    @Transactional
     override fun getMovieById(id: UUID): Movie {
 
         return movieRepository.getMovieById(id) ?: throw NotFoundException(MOVIE_NOT_FOUND)
@@ -57,6 +60,7 @@ class MovieServiceImpl(
 
     }
 
+    @Transactional
     override fun getMoviesByGenre(genreId: UUID): List<Movie> {
         val genre = genreRepository.findByIdOrNull(genreId) ?: throw NotFoundException(GenreServiceImpl.GENRE_NOT_FOUND)
 
@@ -95,6 +99,7 @@ class MovieServiceImpl(
         movie.title = movieDetail.title
         movie.movieDetail = movieDetail
         movie.genres = movie.genres.plus(genres)
+        movie.movieIdFake = movie.movieIdFake
 
         movieRepository.save(movie)
 
@@ -110,6 +115,7 @@ class MovieServiceImpl(
         val newMovieDetail = updateMovieRequest.toMovieDetail(movie.movieDetail)
 
         movie.title = newMovieDetail.title
+        movie.movieIdFake = updateMovieRequest.movieIdFake ?: movie.movieIdFake
 
         if (updateMovieRequest.genreIds != null) {
             movie.genres = genreRepository.getGenresByIdIsIn(updateMovieRequest.genreIds)

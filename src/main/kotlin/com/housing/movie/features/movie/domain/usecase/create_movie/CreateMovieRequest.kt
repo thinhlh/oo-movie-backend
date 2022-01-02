@@ -42,6 +42,8 @@ data class CreateMovieRequest(
 
     val genreIds: List<UUID> = mutableListOf(),
 
+    val movieIdFake: String = "",
+
     val isTVSeries: Boolean = false
 
 ) {

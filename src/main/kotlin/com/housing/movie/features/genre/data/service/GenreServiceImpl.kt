@@ -6,6 +6,7 @@ import com.housing.movie.features.genre.data.repository.GenreRepository
 import com.housing.movie.features.genre.domain.entity.Genre
 import com.housing.movie.features.genre.domain.service.GenreService
 import com.housing.movie.features.genre.domain.usecase.create_genre.CreateGenreRequest
+import com.housing.movie.features.genre.domain.usecase.update_genre.UpdateGenreRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -58,13 +59,14 @@ class GenreServiceImpl(
     }
 
     @Transactional
-    override fun updateGenreTitle(id: UUID, name: String): Genre {
-        val genre: Genre = checkGenreExists(genreRepository.getGenreById(id))
-        if (genreRepository.existsByName(name)) {
+    override fun updateGenre(updateGenreRequest: UpdateGenreRequest): Genre {
+        val genre: Genre = checkGenreExists(genreRepository.getGenreById(updateGenreRequest.id))
+        if (genreRepository.existsByName(updateGenreRequest.name)) {
             // Already exists
-            throw ObjectAlreadyExistsException(message = GENRE_NAME_EXISTS.format(name))
+            throw ObjectAlreadyExistsException(message = GENRE_NAME_EXISTS.format(updateGenreRequest.name))
         }
-        genre.name = name
+        genre.name = updateGenreRequest.name
+        genre.genreIdFake = updateGenreRequest.genreIdFake
 
         return genre
     }

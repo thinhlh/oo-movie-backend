@@ -29,7 +29,7 @@ class MovieDetail(
 
     val originalTitle: String = "",
 
-    @Lob
+    @Column(columnDefinition = "TEXT")
     val overview: String = "",
 
     val posterPath: String = "",

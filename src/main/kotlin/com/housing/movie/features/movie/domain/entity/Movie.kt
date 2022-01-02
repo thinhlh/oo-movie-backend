@@ -55,6 +55,9 @@ class Movie(
     @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
     val episodes: MutableList<Episode> = mutableListOf(),
 
+    @JsonProperty(value = "movie_id_fake")
+    var movieIdFake: String = "",
+
     var enabled: Boolean = true
 
 )

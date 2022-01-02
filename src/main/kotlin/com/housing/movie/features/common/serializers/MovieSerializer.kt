@@ -67,8 +67,8 @@ class MovieSerializer(
             it.writeObjectField("vote_count", movieDetail?.voteCount)
             it.writeObjectField("view_count", movieDetail?.viewCount)
             it.writeBooleanField("is_mine", movieDetail?.isMine ?: true)
+            it.writeStringField("movie_id_fake", movie?.movieIdFake)
             it.writeBooleanField("is_tv_series", movieDetail?.isTVSeries ?: false)
-
             it.writeBooleanField("enabled", movie?.enabled ?: true)
 
             jsonGenerator.writeEndObject()

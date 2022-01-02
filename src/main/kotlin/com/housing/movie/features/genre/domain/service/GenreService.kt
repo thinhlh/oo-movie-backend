@@ -2,6 +2,7 @@ package com.housing.movie.features.genre.domain.service
 
 import com.housing.movie.features.genre.domain.entity.Genre
 import com.housing.movie.features.genre.domain.usecase.create_genre.CreateGenreRequest
+import com.housing.movie.features.genre.domain.usecase.update_genre.UpdateGenreRequest
 import java.util.*
 
 interface GenreService {
@@ -13,5 +14,5 @@ interface GenreService {
 
     fun enableGenre(id: UUID): Boolean
 
-    fun updateGenreTitle(id: UUID, name: String): Genre
+    fun updateGenre(updateGenreRequest: UpdateGenreRequest): Genre
 }
