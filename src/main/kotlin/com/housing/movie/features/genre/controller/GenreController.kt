@@ -28,26 +28,26 @@ class GenreController(
 
     @GetMapping("/genres")
     fun getAllGenres(): ResponseEntity<BaseResponse<List<Genre>>> {
-        return successResponse.body(BaseResponse.success(getAllGenresUseCase()))
+        return successResponse(getAllGenresUseCase())
     }
 
     @PostMapping("/genre")
     fun createGenre(@RequestBody @Valid createGenreRequest: CreateGenreRequest): ResponseEntity<BaseResponse<Genre>> {
-        return successResponse.body(BaseResponse.success(createGenreUseCase(createGenreRequest)))
+        return successResponse(createGenreUseCase(createGenreRequest))
     }
 
     @DeleteMapping("/genre")
     fun deleteGenre(@RequestParam id: UUID): ResponseEntity<BaseResponse<Boolean>> {
-        return successResponse.body(BaseResponse.success(deleteGenreUseCase(id)))
+        return successResponse(deleteGenreUseCase(id))
     }
 
     @PutMapping("/genre/enable")
     fun redoDeleteGenre(@RequestParam id: UUID): ResponseEntity<BaseResponse<Boolean>> {
-        return successResponse.body(BaseResponse.success(enableGenreUseCase(id)))
+        return successResponse(enableGenreUseCase(id))
     }
 
     @PutMapping("/genre")
     fun updateGenre(@Valid @RequestBody updateGenreRequest: UpdateGenreRequest): ResponseEntity<BaseResponse<Genre>> {
-        return successResponse.body(BaseResponse.success(updateGenreUseCase(updateGenreRequest)))
+        return successResponse(updateGenreUseCase(updateGenreRequest))
     }
 }

@@ -1,5 +1,9 @@
 package com.housing.movie.config
 
+
+/**
+ * Setup serializer module for multiple serializer
+ * */
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.housing.movie.features.common.serializers.MovieBeanSerializerModifier

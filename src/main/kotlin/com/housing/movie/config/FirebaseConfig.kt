@@ -1,5 +1,9 @@
 package com.housing.movie.config
 
+
+/**
+ * Configuration for google cloud bucket
+ * */
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Bucket
 import com.google.cloud.storage.Storage

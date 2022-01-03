@@ -37,7 +37,7 @@ class EpisodeServiceImpl(
         // If movie not exists or episode is already exists => throw error
         val movieId: UUID = createEpisodeRequest.movieId
 
-        val movie: Movie = movieRepository.getMovieById(movieId) ?: throw NotFoundException(message = MOVIE_NOT_FOUND)
+        val movie: Movie = movieRepository.findByIdOrNull(movieId) ?: throw NotFoundException(message = MOVIE_NOT_FOUND)
 
         val episodeExistsInMovie = movie.episodes.any {
             it.id == movieId
@@ -92,5 +92,9 @@ class EpisodeServiceImpl(
         episode.enabled = true
 
         return episode
+    }
+
+    override fun getEpisodesByMovieId(movieId: UUID): List<Episode> {
+        return episodeRepository.getByMovieId(movieId)
     }
 }

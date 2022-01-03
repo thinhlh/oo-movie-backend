@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity
 abstract class BaseController {
     protected val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
-    protected val successResponse: ResponseEntity.BodyBuilder =
-            ResponseEntity
-                    .ok()
+    protected fun <T> successResponse(body: T): ResponseEntity<BaseResponse<T>> {
+        return ResponseEntity.ok(BaseResponse.success(body))
+    }
 
 }

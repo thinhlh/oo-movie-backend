@@ -13,7 +13,7 @@ class Episode(
     val id: UUID = UUID.randomUUID(),
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     var movie: Movie? = null,
 

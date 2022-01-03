@@ -15,4 +15,6 @@ interface EpisodeService {
     fun deleteEpisode(id: UUID): Boolean
 
     fun enableEpisode(id: UUID): Episode
+
+    fun getEpisodesByMovieId(movieId: UUID): List<Episode>
 }

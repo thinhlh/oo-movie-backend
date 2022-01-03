@@ -2,9 +2,9 @@ package com.housing.movie.base
 
 
 data class BaseResponse<T>(
-        val success: Boolean,
-        val message: String?,
-        val data: T?
+    val success: Boolean,
+    val message: String?,
+    val data: T?
 
 ) {
     companion object {
@@ -13,7 +13,7 @@ data class BaseResponse<T>(
         }
 
         fun error(message: String): BaseResponse<String> {
-            return BaseResponse(success = false,message = message,data=null)
+            return BaseResponse(success = false, message = message, data = null)
         }
     }
 }

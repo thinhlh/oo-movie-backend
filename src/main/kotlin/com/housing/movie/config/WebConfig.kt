@@ -1,5 +1,8 @@
 package com.housing.movie.config
 
+/**
+ * This configuration file is used for cors exception
+ * */
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.EnableWebMvc

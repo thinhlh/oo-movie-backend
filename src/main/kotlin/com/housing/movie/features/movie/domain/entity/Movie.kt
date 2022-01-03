@@ -29,7 +29,6 @@ class Movie(
         joinColumns = [JoinColumn(name = "movie_id")],
         inverseJoinColumns = [JoinColumn(name = "genre_id")]
     )
-
     var genres: List<Genre> = mutableListOf(),
 
     @ManyToMany
@@ -46,13 +45,13 @@ class Movie(
     @JsonProperty(value = "movie_people")
     var moviePersons: List<MoviePerson>? = emptyList(),
 
-    @OneToOne(cascade = [CascadeType.ALL])
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_detail_id", referencedColumnName = "id")
     @JsonProperty(value = "movie_detail")
     var movieDetail: MovieDetail? = null,
 
     @JsonIgnore
-    @OneToMany(mappedBy = "movie", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "movie")
     val episodes: MutableList<Episode> = mutableListOf(),
 
     @JsonProperty(value = "movie_id_fake")

@@ -22,12 +22,12 @@ class ResourcesController(
 
     @PostMapping("/upload", consumes = ["multipart/form-data"])
     fun uploadVideo(file: MultipartFile): ResponseEntity<BaseResponse<String>> {
-        return successResponse.body(BaseResponse.success(uploadVideoUseCase(file)))
+        return successResponse(uploadVideoUseCase(file))
     }
 
     @GetMapping("/download")
     fun generateDownloadVideo(@RequestParam path: String): ResponseEntity<BaseResponse<URL>> {
-        return successResponse.body(BaseResponse.success(generateObjectLinkUseCase(path)))
+        return successResponse(generateObjectLinkUseCase(path))
     }
 
 }

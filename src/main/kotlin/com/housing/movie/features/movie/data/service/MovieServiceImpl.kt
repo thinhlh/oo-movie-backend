@@ -30,20 +30,17 @@ class MovieServiceImpl(
 
     @Transactional
     override fun getAllMovies(): List<Movie> {
-        return movieRepository.getAllByEnabledIsTrue()
+        return movieRepository.findAll().toList()
     }
 
     @Transactional
     override fun getMovieByTitle(title: String): Movie {
-
         return movieRepository.getMovieByTitleAndEnabledIsTrue(title) ?: throw NotFoundException(MOVIE_NOT_FOUND)
     }
 
     @Transactional
     override fun getMovieById(id: UUID): Movie {
-
-        return movieRepository.getMovieById(id) ?: throw NotFoundException(MOVIE_NOT_FOUND)
-
+        return movieRepository.findByIdOrNull(id) ?: throw NotFoundException(MOVIE_NOT_FOUND)
     }
 
     @Transactional

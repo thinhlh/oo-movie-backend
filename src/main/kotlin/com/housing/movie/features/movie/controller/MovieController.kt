@@ -35,7 +35,7 @@ class MovieController(
 
     @GetMapping("/movies")
     fun getAllMovies(): ResponseEntity<BaseResponse<List<Movie>>> {
-        return successResponse.body(BaseResponse.success(getAllMoviesUseCase()))
+        return successResponse(getAllMoviesUseCase())
     }
 
     @ApiResponses(
@@ -53,41 +53,39 @@ class MovieController(
             throw MissingServletRequestParameterException("id", "UUID")
         }
 
-        return successResponse.body(
-            BaseResponse.success(
-                if (id != null) getMovieByIdUseCase(id)
-                else getMovieByTitleUseCase(title)
-            )
+        return successResponse(
+            if (id != null) getMovieByIdUseCase(id)
+            else getMovieByTitleUseCase(title)
         )
     }
 
     @PostMapping("/movie/genres")
     fun assignGenresToMovie(@RequestBody @Valid assignTagsToMovieRequest: AssignGenresToMovieRequest): ResponseEntity<BaseResponse<Movie>> {
-        return successResponse.body(BaseResponse.success(assignGenresToMovieUseCase(assignTagsToMovieRequest)))
+        return successResponse(assignGenresToMovieUseCase(assignTagsToMovieRequest))
     }
 
     @GetMapping("/movies/genre")
     fun getMoviesByGenre(@RequestParam genreId: UUID): ResponseEntity<BaseResponse<List<Movie>>> {
-        return successResponse.body(BaseResponse.success(getMoviesByGenreUseCase(genreId)))
+        return successResponse(getMoviesByGenreUseCase(genreId))
     }
 
     @DeleteMapping("/movie")
     fun deleteMovie(@RequestParam id: UUID): ResponseEntity<BaseResponse<Boolean>> {
-        return ResponseEntity.ok(BaseResponse.success(deleteMovieUseCase(id)))
+        return successResponse(deleteMovieUseCase(id))
     }
 
     @PutMapping("/movie/enable")
     fun redoDeleteMovie(@RequestParam id: UUID): ResponseEntity<BaseResponse<Movie>> {
-        return ResponseEntity.ok(BaseResponse.success(enableMovieUseCase(id)))
+        return successResponse(enableMovieUseCase(id))
     }
 
     @PostMapping("/movie")
     fun createMovie(@RequestBody @Valid createMovieRequest: CreateMovieRequest): ResponseEntity<BaseResponse<Movie>> {
-        return ResponseEntity.ok(BaseResponse.success(createMovieUseCase(createMovieRequest)))
+        return successResponse(createMovieUseCase(createMovieRequest))
     }
 
     @PutMapping("/movie")
     fun updateMovie(@RequestBody @Valid updateMovieRequest: UpdateMovieRequest): ResponseEntity<BaseResponse<Movie>> {
-        return ResponseEntity.ok(BaseResponse.success(updateMovieUseCase(updateMovieRequest)))
+        return successResponse(updateMovieUseCase(updateMovieRequest))
     }
 }

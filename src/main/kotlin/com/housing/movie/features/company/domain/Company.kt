@@ -31,6 +31,6 @@ class Company(
     @ManyToMany(mappedBy = "companies")
     var producedMovies: List<Movie> = emptyList(),
 
-    var enabled: Boolean = true
+    var enabled: Boolean = true,
 
-)
+    )

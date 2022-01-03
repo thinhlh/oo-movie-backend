@@ -7,6 +7,7 @@ import com.housing.movie.features.genre.domain.entity.Genre
 import com.housing.movie.features.genre.domain.service.GenreService
 import com.housing.movie.features.genre.domain.usecase.create_genre.CreateGenreRequest
 import com.housing.movie.features.genre.domain.usecase.update_genre.UpdateGenreRequest
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
@@ -23,7 +24,7 @@ class GenreServiceImpl(
     }
 
     override fun getAllGenres(): List<Genre> {
-        return genreRepository.getAllByEnabledIsTrue()
+        return genreRepository.findAll().toList()
     }
 
     override fun createGenre(createGenreRequest: CreateGenreRequest): Genre {
@@ -49,7 +50,7 @@ class GenreServiceImpl(
 
     @Transactional
     protected fun updateGenreVisibility(id: UUID, enabled: Boolean): Boolean {
-        val genre: Genre = checkGenreExists(genreRepository.getGenreById(id))
+        val genre: Genre = checkGenreExists(genreRepository.findByIdOrNull(id))
 
         genre.apply {
             this.enabled = enabled
@@ -60,7 +61,7 @@ class GenreServiceImpl(
 
     @Transactional
     override fun updateGenre(updateGenreRequest: UpdateGenreRequest): Genre {
-        val genre: Genre = checkGenreExists(genreRepository.getGenreById(updateGenreRequest.id))
+        val genre: Genre = checkGenreExists(genreRepository.findByIdOrNull(updateGenreRequest.id))
         if (genreRepository.existsByName(updateGenreRequest.name)) {
             // Already exists
             throw ObjectAlreadyExistsException(message = GENRE_NAME_EXISTS.format(updateGenreRequest.name))
