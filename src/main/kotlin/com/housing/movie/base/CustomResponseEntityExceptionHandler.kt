@@ -8,6 +8,9 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.authentication.InternalAuthenticationServiceException
+import org.springframework.security.core.AuthenticationException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.MissingServletRequestParameterException
@@ -19,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 /**
  * Current exceptions that are handled:
+ * @exception AuthenticationException
  * @exception ConversionException
  * @exception HttpMessageNotReadableException
  * @exception HttpRequestMethodNotSupportedException
@@ -35,6 +39,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * */
 @RestControllerAdvice
 class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
+
+    @ExceptionHandler(value = [AuthenticationException::class, InternalAuthenticationServiceException::class, BadCredentialsException::class])
+    fun handleUnAuthenticatedException(
+        exception: MissingKotlinParameterException,
+        request: WebRequest
+    ): ResponseEntity<BaseResponse<String>> {
+        val errorResponse = BaseResponse.error("Unauthenticated request")
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse)
+    }
 
     override fun handleHttpRequestMethodNotSupported(
         ex: HttpRequestMethodNotSupportedException,
@@ -169,6 +183,6 @@ class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
     fun handleRunOfUsageException(exception: RunOutOfUsageException, request: WebRequest): ResponseEntity<Any> {
         val errorResponse = BaseResponse.error(exception.message.toString())
 
-        return ResponseEntity(errorResponse,HttpStatus.BAD_REQUEST)
+        return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
 }
