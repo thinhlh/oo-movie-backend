@@ -1,6 +1,7 @@
 package com.housing.movie.features.auth.data.service
 
 import com.housing.movie.exceptions.ObjectAlreadyExistsException
+import com.housing.movie.features.auth.domain.entity.Tokens
 import com.housing.movie.features.auth.domain.service.AuthService
 import com.housing.movie.features.auth.domain.usecase.register.RegisterRequest
 import com.housing.movie.features.user.data.repository.UserRepository
@@ -29,6 +30,10 @@ class AuthServiceImpl(
         userRepository.save(user)
 
         return true
+    }
+
+    override fun refreshToken(refreshToken: String): Tokens {
+        return Tokens("","")
     }
 
     private fun encryptPassword(rawPassword: String): String {

@@ -4,14 +4,11 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.housing.movie.config.filter.CustomAuthenticationFilter
 import com.housing.movie.config.filter.CustomAuthorizationFilter
 import com.housing.movie.config.handlers.CustomAccessDeniedHandler
-import com.housing.movie.features.user.domain.entity.Role
-import com.housing.movie.utils.SecurityPathHelper
+import com.housing.movie.utils.SecurityHelper
 import lombok.RequiredArgsConstructor
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -33,11 +30,6 @@ class SecurityConfig(
     private val bCryptPasswordEncoder: PasswordEncoder
 ) : WebSecurityConfigurerAdapter() {
 
-    companion object {
-
-        fun tokenHashAlgorithm(): Algorithm = Algorithm.HMAC256("housingmovie")
-    }
-
     /**
      * This function is used for authorization purpose by using user detail service,
      * which is implemented by UserService. this will grand authorities to the user
@@ -48,6 +40,7 @@ class SecurityConfig(
 
     override fun configure(http: HttpSecurity?) {
         http?.let {
+            it.cors()
             it.csrf().disable()
             it.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
@@ -63,7 +56,7 @@ class SecurityConfig(
     private fun addAuthorizationPaths(http: HttpSecurity) {
         http.authorizeRequests().run {
 
-            SecurityPathHelper.REQUEST_AUTHORIZATION_PATH.forEach { (pathAndMethods, authorities) ->
+            SecurityHelper.REQUEST_AUTHORIZATION_PATH.forEach { (pathAndMethods, authorities) ->
                 if (authorities == null) {
                     // Permit all
                     if (pathAndMethods.second == null) antMatchers(pathAndMethods.first).permitAll()

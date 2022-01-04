@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.housing.movie.base.BaseResponse
 import com.housing.movie.config.SecurityConfig
 import com.housing.movie.features.user.domain.entity.Role
-import com.housing.movie.utils.SecurityPathHelper
+import com.housing.movie.utils.SecurityHelper
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
@@ -31,12 +31,11 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class CustomAuthorizationFilter : OncePerRequestFilter() {
 
-    private val algorithm: Algorithm = SecurityConfig.tokenHashAlgorithm()
     private val ignoreTokenPaths = mutableMapOf<String, List<HttpMethod>?>()
 
     init {
         val pathsSetup: Map<Pair<String, List<HttpMethod>?>, List<Role>?> =
-            SecurityPathHelper.REQUEST_AUTHORIZATION_PATH
+            SecurityHelper.REQUEST_AUTHORIZATION_PATH
 
         /**
          *  Retrieve all path that does not require token validation @param List<Role> = null
@@ -59,35 +58,16 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
         if (filterIgnorePaths(request)) {
             filterChain.doFilter(request, response)
         } else {
-            try {
-                /**
-                 * We first retrieve the token, the achieve the username and roles which is hashed by the token
-                 * Then we will tell the spring context that the given username has a role like specified in authorities
-                 * */
-                val token = getTokenFromHeader(request) ?: throw NullPointerException()
-
-                val usernameAndRoles = retrieveUsernameAndRoles(token)
-                val username = usernameAndRoles.first
-
-                val authorities: List<SimpleGrantedAuthority> =
-                    usernameAndRoles.second.map { SimpleGrantedAuthority(it) }
-                val usernamePasswordAuthentication = UsernamePasswordAuthenticationToken(username, null, authorities)
-
+            SecurityHelper.authenticate(request, response) { authentication ->
                 // Tell the spring that this the the valid authentication
-                SecurityContextHolder.getContext().authentication = usernamePasswordAuthentication
+                SecurityContextHolder.getContext().authentication = authentication
                 filterChain.doFilter(request, response)
-            } catch (e: Exception) {
-                val errorResponse = BaseResponse.error(e.message.toString())
-                response.contentType = APPLICATION_JSON_VALUE
-                response.status = HttpStatus.UNAUTHORIZED.value()
-                ObjectMapper().writeValue(response.outputStream, errorResponse)
             }
-
         }
     }
 
     private fun retrieveUsernameAndRoles(token: String?): Pair<String, List<String>> {
-        val jwtVerifier: JWTVerifier = JWT.require(algorithm).build()
+        val jwtVerifier: JWTVerifier = JWT.require(SecurityHelper.tokenHashAlgorithm()).build()
         val decodedJWT: DecodedJWT = jwtVerifier.verify(token)
 
         val username = decodedJWT.subject

@@ -7,6 +7,8 @@ import com.housing.movie.base.BaseResponse
 import com.housing.movie.config.SecurityConfig
 import com.housing.movie.exceptions.CustomAuthenticationException
 import com.housing.movie.features.auth.domain.entity.LoginRequest
+import com.housing.movie.features.auth.domain.entity.Tokens
+import com.housing.movie.utils.SecurityHelper
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.security.authentication.AuthenticationManager
@@ -30,13 +32,11 @@ class CustomAuthenticationFilter(
 
     companion object {
         const val claim: String = "roles"
-        const val ACCESS_TOKEN: String = "access_token"
-        const val REFRESH_TOKEN: String = "refresh_token"
         const val ACCESS_TOKEN_TIMEOUT = 60 * 60 * 1000 // 1 hour
         const val REFRESH_TOKEN_TIMEOUT = 7 * 24 * 60 * 60 * 1000 // 1 week
     }
 
-    private val algorithm: Algorithm = SecurityConfig.tokenHashAlgorithm()
+    private val algorithm: Algorithm = SecurityHelper.tokenHashAlgorithm()
 
     // This is called whenever user call in the /login api
     override fun attemptAuthentication(request: HttpServletRequest?, response: HttpServletResponse?): Authentication {
@@ -96,12 +96,7 @@ class CustomAuthenticationFilter(
 
         // Response to user
         val tokensResponse =
-            BaseResponse.success(
-                mapOf<String, String>(
-                    ACCESS_TOKEN to accessToken,
-                    REFRESH_TOKEN to refreshToken
-                )
-            )
+            BaseResponse.success(Tokens(accessToken, refreshToken))
         response?.contentType = APPLICATION_JSON_VALUE
 
         ObjectMapper().writeValue(response?.outputStream, tokensResponse)

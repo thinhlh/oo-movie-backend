@@ -2,8 +2,11 @@ package com.housing.movie.features.auth.controller
 
 import com.housing.movie.base.BaseController
 import com.housing.movie.base.BaseResponse
+import com.housing.movie.features.auth.domain.entity.Tokens
+import com.housing.movie.features.auth.domain.usecase.RefreshTokenUseCase
 import com.housing.movie.features.auth.domain.usecase.register.RegisterRequest
 import com.housing.movie.features.auth.domain.usecase.register.RegisterUseCase
+import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -14,7 +17,8 @@ import javax.validation.Valid
 
 @RestController
 class AuthController(
-    private val registerUseCase: RegisterUseCase
+    private val registerUseCase: RegisterUseCase,
+    private val refreshTokenUseCase: RefreshTokenUseCase
 ) : BaseController() {
 
     @PostMapping("/register")
@@ -22,11 +26,13 @@ class AuthController(
         return successResponse(registerUseCase(registerRequest))
     }
 
-//    @PostMapping("/token/refresh")
-//    fun refreshToken(
-//        request: HttpServletRequest,
-//        response: HttpServletResponse
-//    ): ResponseEntity<BaseResponse<Map<String, String>>> {
-//        return successResponse()
-//    }
+    @PostMapping("/token/refresh")
+    fun refreshToken(
+        request: HttpServletRequest,
+        response: HttpServletResponse
+    ): ResponseEntity<BaseResponse<Tokens>> {
+        val refreshToken = request.getHeader(AUTHORIZATION)
+
+        return successResponse(refreshTokenUseCase(refreshToken))
+    }
 }
