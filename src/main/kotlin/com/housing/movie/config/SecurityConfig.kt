@@ -4,6 +4,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.housing.movie.config.filter.CustomAuthenticationFilter
 import com.housing.movie.config.filter.CustomAuthorizationFilter
 import com.housing.movie.features.user.domain.entity.Role
+import com.housing.movie.utils.SecurityPathHelper
 import lombok.RequiredArgsConstructor
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -32,14 +33,6 @@ class SecurityConfig(
 ) : WebSecurityConfigurerAdapter() {
 
     companion object {
-        val REQUEST_AUTHORIZATION = mapOf<Map<HttpMethod?, String>, List<Role>?>(
-            mapOf<HttpMethod?, String>(
-                null to "/login"
-            ) to null,
-            mapOf<HttpMethod?, String>(
-                HttpMethod.GET to "/ping"
-            ) to listOf(Role.Subscriber, Role.Administrator)
-        )
 
         fun tokenHashAlgorithm(): Algorithm = Algorithm.HMAC256("housingmovie")
     }
@@ -68,16 +61,22 @@ class SecurityConfig(
 
     private fun addAuthorizationPaths(http: HttpSecurity) {
         http.authorizeRequests().run {
-            REQUEST_AUTHORIZATION.forEach { (methodAndPath, authorities) ->
-                methodAndPath.forEach { (method, path) ->
-                    if (authorities == null) {
-                        // Permit all
-                        if (method == null) antMatchers(path).permitAll()
-                        else antMatchers(method, path).permitAll()
+
+            SecurityPathHelper.REQUEST_AUTHORIZATION_PATH.forEach { (pathAndMethods, authorities) ->
+                if (authorities == null) {
+                    // Permit all
+                    if (pathAndMethods.second == null) antMatchers(pathAndMethods.first).permitAll()
+                    else pathAndMethods.second!!.forEach { method ->
+                        antMatchers(method, pathAndMethods.first).permitAll()
+                    }
+                } else {
+                    if (pathAndMethods.second == null) {
+                        antMatchers(pathAndMethods.first).hasAnyAuthority(*authorities.map { it.value }.toTypedArray())
                     } else {
-                        if (method == null) antMatchers(path).hasAnyAuthority(*authorities.map { it.value }
-                            .toTypedArray())
-                        else antMatchers(method, path).hasAnyAuthority(*authorities.map { it.value }.toTypedArray())
+                        pathAndMethods.second!!.forEach { method ->
+                            antMatchers(method, pathAndMethods.first).hasAnyAuthority(*authorities.map { it.value }
+                                .toTypedArray())
+                        }
                     }
                 }
             }

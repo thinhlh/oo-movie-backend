@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.housing.movie.base.BaseResponse
 import com.housing.movie.config.SecurityConfig
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -96,7 +97,9 @@ class CustomAuthenticationFilter(
         response: HttpServletResponse?,
         failed: AuthenticationException?
     ) {
+        response?.contentType = APPLICATION_JSON_VALUE
+        response?.status = HttpStatus.FORBIDDEN.value()
+        ObjectMapper().writeValue(response?.outputStream, BaseResponse.error(failed?.message.toString()))
 
-        throw failed!!
     }
 }
