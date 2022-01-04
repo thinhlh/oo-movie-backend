@@ -32,7 +32,7 @@ class CustomAuthenticationFilter(
 
     companion object {
         const val claim: String = "roles"
-        const val ACCESS_TOKEN_TIMEOUT = 60 * 60 * 1000 // 1 hour
+        const val ACCESS_TOKEN_TIMEOUT = 1 * 60 * 1000 // 1 hour
         const val REFRESH_TOKEN_TIMEOUT = 7 * 24 * 60 * 60 * 1000 // 1 week
     }
 
@@ -76,22 +76,20 @@ class CustomAuthenticationFilter(
 
 
         // One hour expire
-        val accessToken = JWT
-            .create()
-            .withSubject(user?.username)
-            .withExpiresAt(Date(System.currentTimeMillis() + ACCESS_TOKEN_TIMEOUT))
-            .withIssuer(request?.requestURL.toString())
-            .withClaim(claim, user?.authorities?.map { it -> it.authority })
-            .sign(algorithm)
+        val accessToken = SecurityHelper.generateToken(
+            username = user?.username,
+            timeout = ACCESS_TOKEN_TIMEOUT,
+            authorities = user?.authorities?.map { it -> it.authority },
+            requestUrl = request?.requestURL.toString()
+        )
 
         // One day expire
-        val refreshToken = JWT
-            .create()
-            .withSubject(user?.username)
-            .withExpiresAt(Date(System.currentTimeMillis() + REFRESH_TOKEN_TIMEOUT))
-            .withIssuer(request?.requestURL.toString())
-            .withClaim(claim, user?.authorities?.map { it -> it.authority })
-            .sign(algorithm)
+        val refreshToken = SecurityHelper.generateToken(
+            username = user?.username,
+            timeout = REFRESH_TOKEN_TIMEOUT,
+            authorities = user?.authorities?.map { it -> it.authority },
+            requestUrl = request?.requestURL.toString()
+        )
 
 
         // Response to user

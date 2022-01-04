@@ -58,32 +58,12 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
         if (filterIgnorePaths(request)) {
             filterChain.doFilter(request, response)
         } else {
-            SecurityHelper.authenticate(request, response) { authentication ->
+            SecurityHelper.authenticate(request, response) { authResult ->
                 // Tell the spring that this the the valid authentication
-                SecurityContextHolder.getContext().authentication = authentication
+                SecurityContextHolder.getContext().authentication = authResult
                 filterChain.doFilter(request, response)
             }
         }
-    }
-
-    private fun retrieveUsernameAndRoles(token: String?): Pair<String, List<String>> {
-        val jwtVerifier: JWTVerifier = JWT.require(SecurityHelper.tokenHashAlgorithm()).build()
-        val decodedJWT: DecodedJWT = jwtVerifier.verify(token)
-
-        val username = decodedJWT.subject
-
-        // Actually in this application, we only use one role for each user
-        val roles = decodedJWT.getClaim("roles").asList(String::class.java)
-
-        return Pair(username, roles)
-    }
-
-    private fun getTokenFromHeader(request: HttpServletRequest): String? {
-        val authorizationHeader: String? = request.getHeader(AUTHORIZATION)
-
-        return if (authorizationHeader == null) null
-        else if (!authorizationHeader.startsWith("Bearer ")) null
-        else authorizationHeader.substring("Bearer ".length)
     }
 
     // This path is not contained in ignored token paths

@@ -6,19 +6,23 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.housing.movie.base.BaseResponse
-import com.housing.movie.config.SecurityConfig
+import com.housing.movie.config.filter.CustomAuthenticationFilter
+import com.housing.movie.exceptions.CustomAuthenticationException
+import com.housing.movie.features.auth.domain.entity.Tokens
 import com.housing.movie.features.user.domain.entity.Role
+import com.housing.movie.utils.SecurityHelper.REQUEST_AUTHORIZATION_PATH
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.context.SecurityContextHolder
-import java.lang.Exception
-import java.lang.NullPointerException
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
+import java.util.*
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+
 
 /**
  * @property REQUEST_AUTHORIZATION_PATH indicate whether a method with path should be accessed with specific role
@@ -26,6 +30,8 @@ import javax.servlet.http.HttpServletResponse
  * if @param HttpMethod is null, this is used for all methods
  * */
 object SecurityHelper {
+
+    private const val INVALID_TOKEN = "Invalid token."
 
     fun tokenHashAlgorithm(): Algorithm = Algorithm.HMAC256("housingmovie")
 
@@ -54,7 +60,7 @@ object SecurityHelper {
     fun authenticate(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        callback: (usernamePasswordAuthenticationToken: UsernamePasswordAuthenticationToken) -> Unit
+        callback: (authResult: UsernamePasswordAuthenticationToken) -> Unit
     ) {
         try {
             /**
@@ -72,15 +78,65 @@ object SecurityHelper {
 
             callback(usernamePasswordAuthentication)
 
-
         } catch (e: Exception) {
-            val errorResponse = BaseResponse.error(e.message.toString())
-            response.contentType = MediaType.APPLICATION_JSON_VALUE
-            response.status = HttpStatus.UNAUTHORIZED.value()
-            ObjectMapper().writeValue(response.outputStream, errorResponse)
+            errorResponse(response, e)
         }
     }
 
+    /** Use this method for authenticate user using
+     * @param refreshToken, which will execute the callback to the UserService to find the user
+     * After retrieved the user this will get the authorities (role) and create new access token
+     */
+    fun authenticate(
+        refreshToken: String?,
+        callback: (username: String) -> Role
+    ): Tokens {
+        try {
+            val decodedRefreshToken = decodeToken(refreshToken) ?: throw CustomAuthenticationException(INVALID_TOKEN)
+            val usernameAndRoles = retrieveUsernameAndRoles(decodedRefreshToken)
+
+            val role = callback(usernameAndRoles.first)
+
+            val currentRequest = (RequestContextHolder.currentRequestAttributes() as ServletRequestAttributes)
+                .request
+
+            val accessToken = generateToken(
+                username = usernameAndRoles.first,
+                timeout = CustomAuthenticationFilter.ACCESS_TOKEN_TIMEOUT,
+                authorities = listOf(role.value),
+                requestUrl = currentRequest.requestURL.toString()
+            )
+
+            return Tokens(accessToken, decodedRefreshToken)
+        } catch (e: Exception) {
+            throw CustomAuthenticationException(message = e.message)
+        }
+    }
+
+    // Generate JWT token
+    fun generateToken(
+        username: String?,
+        timeout: Int,
+        authorities: List<String>?,
+        requestUrl: String
+    ): String {
+        return JWT
+            .create()
+            .withSubject(username)
+            .withExpiresAt(Date(System.currentTimeMillis() + timeout))
+            .withIssuer(requestUrl)
+            .withClaim(CustomAuthenticationFilter.claim, authorities)
+            .sign(tokenHashAlgorithm())
+    }
+
+    private fun errorResponse(response: HttpServletResponse, e: Exception) {
+        val errorResponse = BaseResponse.error(e.message.toString())
+        response.contentType = MediaType.APPLICATION_JSON_VALUE
+        response.status = HttpStatus.UNAUTHORIZED.value()
+        ObjectMapper().writeValue(response.outputStream, errorResponse)
+    }
+
+    // Retrieve username and role from JWT token
     private fun retrieveUsernameAndRoles(token: String?): Pair<String, List<String>> {
         val jwtVerifier: JWTVerifier = JWT.require(tokenHashAlgorithm()).build()
         val decodedJWT: DecodedJWT = jwtVerifier.verify(token)
@@ -93,12 +149,17 @@ object SecurityHelper {
         return Pair(username, roles)
     }
 
+    // Decode token from authorization header
     private fun getTokenFromHeader(request: HttpServletRequest): String? {
         val authorizationHeader: String? = request.getHeader(HttpHeaders.AUTHORIZATION)
 
-        return if (authorizationHeader == null) null
-        else if (!authorizationHeader.startsWith("Bearer ")) null
-        else authorizationHeader.substring("Bearer ".length)
+        return decodeToken(authorizationHeader)
     }
 
+    // Decode token from raw token to extracted token
+    private fun decodeToken(refreshToken: String?): String? {
+        return if (refreshToken == null) null
+        else if (!refreshToken.startsWith("Bearer ")) null
+        else refreshToken.substring("Bearer ".length)
+    }
 }

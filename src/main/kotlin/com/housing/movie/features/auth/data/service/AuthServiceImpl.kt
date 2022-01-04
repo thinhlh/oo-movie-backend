@@ -1,10 +1,16 @@
 package com.housing.movie.features.auth.data.service
 
+import com.housing.movie.exceptions.ConversionException
+import com.housing.movie.exceptions.CustomAuthenticationException
+import com.housing.movie.exceptions.NotFoundException
 import com.housing.movie.exceptions.ObjectAlreadyExistsException
 import com.housing.movie.features.auth.domain.entity.Tokens
 import com.housing.movie.features.auth.domain.service.AuthService
 import com.housing.movie.features.auth.domain.usecase.register.RegisterRequest
 import com.housing.movie.features.user.data.repository.UserRepository
+import com.housing.movie.utils.SecurityHelper
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -16,6 +22,7 @@ class AuthServiceImpl(
 
     companion object {
         const val USER_ALREADY_EXISTS = "User already exists."
+        const val USER_NOT_FOUND = "User not found."
     }
 
     override fun register(registerRequest: RegisterRequest): Boolean {
@@ -33,7 +40,11 @@ class AuthServiceImpl(
     }
 
     override fun refreshToken(refreshToken: String): Tokens {
-        return Tokens("","")
+        return SecurityHelper.authenticate(
+            refreshToken
+        ) { username ->
+            (userRepository.findByUsernameAndEnabledIsTrue(username) ?: throw NotFoundException(USER_NOT_FOUND)).role
+        }
     }
 
     private fun encryptPassword(rawPassword: String): String {

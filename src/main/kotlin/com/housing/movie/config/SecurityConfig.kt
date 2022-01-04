@@ -40,8 +40,8 @@ class SecurityConfig(
 
     override fun configure(http: HttpSecurity?) {
         http?.let {
-            it.cors()
-            it.csrf().disable()
+            it.cors().and()
+            it.csrf().disable().httpBasic()
             it.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
             addAuthorizationPaths(it)
