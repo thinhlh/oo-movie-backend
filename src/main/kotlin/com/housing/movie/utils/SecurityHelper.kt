@@ -70,6 +70,8 @@ object SecurityHelper {
                 usernameAndRoles.second.map { SimpleGrantedAuthority(it) }
             val usernamePasswordAuthentication = UsernamePasswordAuthenticationToken(username, null, authorities)
 
+            callback(usernamePasswordAuthentication)
+
 
         } catch (e: Exception) {
             val errorResponse = BaseResponse.error(e.message.toString())
