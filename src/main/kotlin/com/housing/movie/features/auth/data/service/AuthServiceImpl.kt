@@ -1,5 +1,6 @@
 package com.housing.movie.features.auth.data.service
 
+import com.housing.movie.exceptions.ObjectAlreadyExistsException
 import com.housing.movie.features.auth.domain.service.AuthService
 import com.housing.movie.features.auth.domain.usecase.register.RegisterRequest
 import com.housing.movie.features.user.data.repository.UserRepository
@@ -11,7 +12,17 @@ class AuthServiceImpl(
     private val passwordEncoder: PasswordEncoder,
     private val userRepository: UserRepository,
 ) : AuthService {
+
+    companion object {
+        const val USER_ALREADY_EXISTS = "User already exists."
+    }
+
     override fun register(registerRequest: RegisterRequest): Boolean {
+
+        if (userRepository.existsByUsername(registerRequest.username)) throw ObjectAlreadyExistsException(
+            USER_ALREADY_EXISTS
+        )
+
         val user = registerRequest.toUser()
         user.password = encryptPassword(user.password)
 

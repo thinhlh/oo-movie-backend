@@ -5,6 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.housing.movie.base.BaseResponse
 import com.housing.movie.config.SecurityConfig
+import com.housing.movie.exceptions.CustomAuthenticationException
+import com.housing.movie.features.auth.domain.entity.LoginRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.security.authentication.AuthenticationManager
@@ -14,10 +16,10 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import java.util.*
-import java.util.logging.Logger
 import javax.servlet.FilterChain
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+
 
 /**
  * Authentication filter by username and password
@@ -34,21 +36,34 @@ class CustomAuthenticationFilter(
         const val REFRESH_TOKEN_TIMEOUT = 7 * 24 * 60 * 60 * 1000 // 1 week
     }
 
-
     private val algorithm: Algorithm = SecurityConfig.tokenHashAlgorithm()
 
     // This is called whenever user call in the /login api
     override fun attemptAuthentication(request: HttpServletRequest?, response: HttpServletResponse?): Authentication {
-        val username = request?.getParameter("username")
-        val password = request?.getParameter("password")
+        val authRequest = getLoginRequest(request)
 
-        Logger.getAnonymousLogger().info("Username:${username},password: ${password}")
-
-        val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(username, password)
+        val usernamePasswordAuthenticationToken =
+            UsernamePasswordAuthenticationToken(authRequest.username, authRequest.password)
 
         return authenticationManager.authenticate(usernamePasswordAuthenticationToken)
     }
 
+    private fun getLoginRequest(request: HttpServletRequest?): LoginRequest {
+
+        request ?: throw CustomAuthenticationException(message = "Unable to authenticate user.")
+
+        val sb = StringBuilder()
+        val reader = request.reader
+        reader.use { it ->
+            var line: String?
+            while (it.readLine().also { line = it } != null) {
+                sb.append(line).append(' ')
+            }
+        }
+        val jsonString = sb.toString()
+
+        return ObjectMapper().readValue(jsonString, LoginRequest::class.java)
+    }
 
     override fun successfulAuthentication(
         request: HttpServletRequest?,

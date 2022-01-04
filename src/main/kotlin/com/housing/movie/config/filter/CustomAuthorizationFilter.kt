@@ -56,15 +56,13 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
         filterChain: FilterChain
     ) {
 
-
-        if (filterIgnorePath(request)) {
+        if (filterIgnorePaths(request)) {
             filterChain.doFilter(request, response)
         } else {
-
             try {
                 /**
                  * We first retrieve the token, the achieve the username and roles which is hashed by the token
-                 * Then we will tell the sping context that the given username has a role like specified in authorities
+                 * Then we will tell the spring context that the given username has a role like specified in authorities
                  * */
                 val token = getTokenFromHeader(request) ?: throw NullPointerException()
 
@@ -109,7 +107,7 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
     }
 
     // This path is not contained in ignored token paths
-    private fun filterIgnorePath(request: HttpServletRequest): Boolean {
+    private fun filterIgnorePaths(request: HttpServletRequest): Boolean {
 
         if (!ignoreTokenPaths.containsKey(request.servletPath)) return false
 

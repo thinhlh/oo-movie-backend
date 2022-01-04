@@ -24,4 +24,14 @@ class CommonController : BaseController() {
     fun info(): ResponseEntity<BaseResponse<String>> {
         return successResponse("Housing Movie Application")
     }
+
+    @GetMapping("/ping/admin")
+    fun pingAdmin(): ResponseEntity<BaseResponse<String>> {
+        return successResponse("You are admin")
+    }
+
+    @GetMapping("/ping/subscriber")
+    fun pingSubscriber(): ResponseEntity<BaseResponse<String>> {
+        return successResponse("You are subscriber")
+    }
 }

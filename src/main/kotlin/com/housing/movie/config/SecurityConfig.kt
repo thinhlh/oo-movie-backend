@@ -3,6 +3,7 @@ package com.housing.movie.config
 import com.auth0.jwt.algorithms.Algorithm
 import com.housing.movie.config.filter.CustomAuthenticationFilter
 import com.housing.movie.config.filter.CustomAuthorizationFilter
+import com.housing.movie.config.handlers.CustomAccessDeniedHandler
 import com.housing.movie.features.user.domain.entity.Role
 import com.housing.movie.utils.SecurityPathHelper
 import lombok.RequiredArgsConstructor
@@ -53,7 +54,7 @@ class SecurityConfig(
             addAuthorizationPaths(it)
 
             it.authorizeRequests().anyRequest().authenticated()
-
+            it.exceptionHandling().accessDeniedHandler(CustomAccessDeniedHandler())
             it.addFilter(CustomAuthenticationFilter(authenticationManagerBean()))
             it.addFilterBefore(CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter::class.java)
         }

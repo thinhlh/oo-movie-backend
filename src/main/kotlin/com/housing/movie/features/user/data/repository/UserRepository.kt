@@ -8,4 +8,8 @@ import java.util.*
 @Repository
 interface UserRepository : CrudRepository<ApplicationUser, UUID> {
     fun findByUsername(username: String): ApplicationUser?
+
+    fun findByUsernameAndEnabledIsTrue(username: String): ApplicationUser?
+
+    fun existsByUsername(username: String): Boolean
 }

@@ -11,14 +11,24 @@ import org.springframework.http.HttpMethod
 object SecurityPathHelper {
     val REQUEST_AUTHORIZATION_PATH = mapOf<Pair<String, List<HttpMethod>?>, List<Role>?>(
 
-        Pair("/login", null) to null,
+        Pair("/login", null)
+                to null,
 
-        Pair("/register", listOf(HttpMethod.POST)) to null,
+        Pair("/register", listOf(HttpMethod.POST))
+                to null,
 
-        Pair("/users", null) to listOf(Role.Administrator),
+        Pair("/users", null)
+                to listOf(Role.Administrator),
 
         Pair("/ping", listOf(HttpMethod.GET))
-                to listOf(Role.Subscriber, Role.Administrator)
+                to null,
+
+        Pair("/ping/admin", listOf(HttpMethod.GET))
+                to listOf(Role.Administrator),
+
+        Pair("/ping/subscriber", listOf(HttpMethod.GET))
+                to listOf(Role.Subscriber)
+
     )
 
 }

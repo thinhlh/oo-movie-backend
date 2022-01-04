@@ -3,6 +3,7 @@ package com.housing.movie.base
 import com.fasterxml.jackson.databind.JsonMappingException
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.housing.movie.exceptions.*
+import org.hibernate.exception.ConstraintViolationException
 import org.springframework.beans.TypeMismatchException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * Current exceptions that are handled:
  * @exception AuthenticationException
  * @exception ConversionException
+ * @exception ConstraintViolationException
  * @exception HttpMessageNotReadableException
  * @exception HttpRequestMethodNotSupportedException
  * @exception MethodArgumentNotValidException
@@ -48,6 +50,26 @@ class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         val errorResponse = BaseResponse.error("Unauthenticated request")
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse)
+    }
+
+    @ExceptionHandler(value = [ConstraintViolationException::class])
+    fun constraintViolationException(
+        exception: ConstraintViolationException,
+        request: WebRequest
+    ): ResponseEntity<BaseResponse<String>> {
+        val errorResponse = BaseResponse.error("${exception.constraintName} must be unique")
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
+    }
+
+    @ExceptionHandler(value = [CustomAuthenticationException::class])
+    fun handleCustomAuthenticationException(
+        exception: CustomAuthenticationException,
+        request: WebRequest
+    ): ResponseEntity<BaseResponse<String>> {
+        val errorResponse = BaseResponse.error(exception.message.toString())
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
     }
 
     override fun handleHttpRequestMethodNotSupported(

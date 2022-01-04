@@ -22,7 +22,8 @@ class UserServiceImpl(
     override fun loadUserByUsername(username: String?): UserDetails {
         username ?: throw NotFoundException(USER_NOT_FOUND)
 
-        val user: ApplicationUser = findUserByUsername(username)
+        val user: ApplicationUser =
+            userRepository.findByUsernameAndEnabledIsTrue(username) ?: throw NotFoundException(USER_NOT_FOUND)
 
         // Add authorities of the requested user
         val authorities: MutableList<SimpleGrantedAuthority> = mutableListOf()
