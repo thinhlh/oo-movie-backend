@@ -32,11 +32,9 @@ class CustomAuthenticationFilter(
 
     companion object {
         const val claim: String = "roles"
-        const val ACCESS_TOKEN_TIMEOUT = 60 * 60 * 1000 // 1 hour
-        const val REFRESH_TOKEN_TIMEOUT = 7 * 24 * 60 * 60 * 1000 // 1 week
+        const val ACCESS_TOKEN_TIMEOUT = 8 * 24 * 60 * 60 * 1000 // 1 hour
+        const val REFRESH_TOKEN_TIMEOUT = 8 * 24 * 60 * 60 * 1000 // 1 week
     }
-
-    private val algorithm: Algorithm = SecurityHelper.tokenHashAlgorithm()
 
     // This is called whenever user call in the /login api
     override fun attemptAuthentication(request: HttpServletRequest?, response: HttpServletResponse?): Authentication {
@@ -108,6 +106,5 @@ class CustomAuthenticationFilter(
         response?.contentType = APPLICATION_JSON_VALUE
         response?.status = HttpStatus.FORBIDDEN.value()
         ObjectMapper().writeValue(response?.outputStream, BaseResponse.error(failed?.message.toString()))
-
     }
 }
