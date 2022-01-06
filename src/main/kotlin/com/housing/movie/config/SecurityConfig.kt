@@ -88,10 +88,12 @@ class SecurityConfig(
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("https://oomovie-admin.vercel.app/", "https://oomovie.vercel.app/")
+        configuration.allowedOriginPatterns = listOf("*")
+//        configuration.allowedOrigins = listOf("https://oomovie-admin.vercel.app/", "https://oomovie.vercel.app/")
         configuration.allowedMethods = listOf("*")
         configuration.allowedHeaders = listOf("*")
         configuration.allowCredentials = true
+
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
         return source
