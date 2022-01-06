@@ -32,7 +32,7 @@ class CustomAuthenticationFilter(
 
     companion object {
         const val claim: String = "roles"
-        const val ACCESS_TOKEN_TIMEOUT = 1 * 60 * 1000 // 1 hour
+        const val ACCESS_TOKEN_TIMEOUT = 60 * 60 * 1000 // 1 hour
         const val REFRESH_TOKEN_TIMEOUT = 7 * 24 * 60 * 60 * 1000 // 1 week
     }
 
