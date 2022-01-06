@@ -24,7 +24,7 @@ class WebConfig : WebMvcConfigurer {
                 "PATCH",
                 "OPTIONS"
             )
-            .allowedOrigins("https://oomovie-admin.vercel.app")
+            .allowedOrigins("https://oomovie-admin.vercel.app/**")
             .allowedHeaders("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization")
             .allowCredentials(true)
     }
