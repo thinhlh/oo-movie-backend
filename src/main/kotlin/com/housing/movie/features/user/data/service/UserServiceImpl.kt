@@ -1,9 +1,11 @@
 package com.housing.movie.features.user.data.service
 
+import com.housing.movie.exceptions.CustomAuthenticationException
 import com.housing.movie.exceptions.NotFoundException
 import com.housing.movie.features.user.data.repository.UserRepository
 import com.housing.movie.features.user.domain.entity.ApplicationUser
 import com.housing.movie.features.user.domain.service.UserService
+import com.housing.movie.utils.ServletHelper
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -17,6 +19,7 @@ class UserServiceImpl(
 
     companion object {
         const val USER_NOT_FOUND = "User not found."
+        const val INVALID_TOKEN = "Invalid token."
     }
 
     override fun loadUserByUsername(username: String?): UserDetails {
@@ -42,5 +45,13 @@ class UserServiceImpl(
 
     override fun getUsers(): List<ApplicationUser> {
         return userRepository.findAll().toList()
+    }
+
+    override fun findUserByJWTToken(): ApplicationUser {
+        val username = ServletHelper.retrieveUsernameAndRoles {
+            throw CustomAuthenticationException(INVALID_TOKEN)
+        }.first
+
+        return userRepository.findByUsername(username) ?: throw NotFoundException(USER_NOT_FOUND)
     }
 }

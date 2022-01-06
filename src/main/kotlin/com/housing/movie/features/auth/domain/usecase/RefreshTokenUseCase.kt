@@ -10,6 +10,6 @@ class RefreshTokenUseCase(
     private val authService: AuthService
 ) : BaseUseCase {
     override fun invoke(data: Any?): Tokens {
-        return authService.refreshToken(data as String)
+        return authService.refreshToken()
     }
 }

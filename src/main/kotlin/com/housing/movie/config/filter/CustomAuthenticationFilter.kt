@@ -9,6 +9,7 @@ import com.housing.movie.exceptions.CustomAuthenticationException
 import com.housing.movie.features.auth.domain.entity.LoginRequest
 import com.housing.movie.features.auth.domain.entity.Tokens
 import com.housing.movie.utils.SecurityHelper
+import com.housing.movie.utils.StringHelper
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.security.authentication.AuthenticationManager
@@ -50,17 +51,7 @@ class CustomAuthenticationFilter(
 
         request ?: throw CustomAuthenticationException(message = "Unable to authenticate user.")
 
-        val sb = StringBuilder()
-        val reader = request.reader
-        reader.use { it ->
-            var line: String?
-            while (it.readLine().also { line = it } != null) {
-                sb.append(line).append(' ')
-            }
-        }
-        val jsonString = sb.toString()
-
-        return ObjectMapper().readValue(jsonString, LoginRequest::class.java)
+        return StringHelper.mapRequestBodyToObject(request, LoginRequest::class.java)
     }
 
     override fun successfulAuthentication(

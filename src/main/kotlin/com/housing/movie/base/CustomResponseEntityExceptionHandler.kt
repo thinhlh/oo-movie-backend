@@ -38,6 +38,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * @exception ResourceHandlingException
  * @exception TypeMismatchException
  * @exception RunOutOfUsageException
+ * @exception UnknownException
  * */
 @RestControllerAdvice
 class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
@@ -206,5 +207,12 @@ class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         val errorResponse = BaseResponse.error(exception.message.toString())
 
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(value = [UnknownException::class])
+    fun handleUnknownException(exception: UnknownException, request: WebRequest): ResponseEntity<Any> {
+        val errorResponse = BaseResponse.error(exception.message.toString())
+
+        return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
     }
 }

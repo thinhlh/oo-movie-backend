@@ -39,10 +39,8 @@ class AuthServiceImpl(
         return true
     }
 
-    override fun refreshToken(refreshToken: String): Tokens {
-        return SecurityHelper.authenticate(
-            refreshToken
-        ) { username ->
+    override fun refreshToken(): Tokens {
+        return SecurityHelper.authenticate { username ->
             (userRepository.findByUsernameAndEnabledIsTrue(username) ?: throw NotFoundException(USER_NOT_FOUND)).role
         }
     }

@@ -6,5 +6,5 @@ import com.housing.movie.features.auth.domain.usecase.register.RegisterRequest
 interface AuthService {
     fun register(registerRequest: RegisterRequest): Boolean
 
-    fun refreshToken(refreshToken: String): Tokens
+    fun refreshToken(): Tokens
 }

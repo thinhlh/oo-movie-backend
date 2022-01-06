@@ -28,12 +28,7 @@ class AuthController(
     }
 
     @GetMapping("/token/refresh")
-    fun refreshToken(
-        request: HttpServletRequest,
-        response: HttpServletResponse
-    ): ResponseEntity<BaseResponse<Tokens>> {
-        val refreshToken = request.getHeader(AUTHORIZATION)
-
-        return successResponse(refreshTokenUseCase(refreshToken))
+    fun refreshToken(): ResponseEntity<BaseResponse<Tokens>> {
+        return successResponse(refreshTokenUseCase())
     }
 }

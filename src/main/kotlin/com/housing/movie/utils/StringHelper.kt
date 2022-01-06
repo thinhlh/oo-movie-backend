@@ -1,6 +1,10 @@
 package com.housing.movie.utils
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.housing.movie.features.auth.domain.entity.LoginRequest
+import org.springframework.http.HttpRequest
 import java.util.*
+import javax.servlet.http.HttpServletRequest
 
 object StringHelper {
 
@@ -26,5 +30,19 @@ object StringHelper {
 
         val randomString = sb.toString();
         return randomString
+    }
+
+    fun <T> mapRequestBodyToObject(request: HttpServletRequest, clazz: Class<T>): T {
+        val stringBuilder = StringBuilder()
+        val reader = request.reader
+        reader.use { it ->
+            var line: String?
+            while (it.readLine().also { line = it } != null) {
+                stringBuilder.append(line).append(' ')
+            }
+        }
+        val jsonString = stringBuilder.toString()
+
+        return ObjectMapper().readValue(jsonString, clazz)
     }
 }

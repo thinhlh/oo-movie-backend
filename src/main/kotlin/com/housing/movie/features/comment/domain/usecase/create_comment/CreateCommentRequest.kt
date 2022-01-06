@@ -11,12 +11,6 @@ data class CreateCommentRequest(
     val content: String,
 
     @NotBlank
-    @JsonProperty(value = "user_id")
-    val userId: UUID,
-
-    @NotBlank
     @JsonProperty(value = "movie_id")
     val movieId: UUID
-) {
-
-}
+)

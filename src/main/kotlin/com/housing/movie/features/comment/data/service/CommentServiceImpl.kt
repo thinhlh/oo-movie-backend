@@ -10,6 +10,7 @@ import com.housing.movie.features.comment.domain.usecase.get_comments.CommentQue
 import com.housing.movie.features.comment.domain.usecase.update_comment.UpdateCommentRequest
 import com.housing.movie.features.movie.data.repository.MovieRepository
 import com.housing.movie.features.user.data.repository.UserRepository
+import com.housing.movie.utils.ServletHelper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -48,10 +49,10 @@ class CommentServiceImpl(
     @Transactional
     override fun createComment(createCommentRequest: CreateCommentRequest): Comment {
         val movieId = createCommentRequest.movieId
-        val userId = createCommentRequest.userId
+        val username = ServletHelper.retrieveUsernameAndRoles().first
 
         val movie = movieRepository.findByIdOrNull(movieId) ?: throw NotFoundException(MOVIE_NOT_FOUND)
-        val user = userRepository.findByIdOrNull(userId) ?: throw NotFoundException(USER_NOT_FOUND)
+        val user = userRepository.findByUsername(username) ?: throw NotFoundException(USER_NOT_FOUND)
 
         var comment = Comment(
             content = createCommentRequest.content,
