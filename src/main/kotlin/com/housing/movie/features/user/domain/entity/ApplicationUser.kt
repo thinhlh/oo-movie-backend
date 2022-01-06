@@ -2,8 +2,7 @@ package com.housing.movie.features.user.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonIgnoreType
-import com.housing.movie.features.movie.domain.entity.Movie
+import com.housing.movie.features.comment.domain.entity.Comment
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -29,4 +28,8 @@ class ApplicationUser(
 
     var enabled: Boolean = true,
 
-    )
+    @JsonIgnore
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY)
+    val comments: MutableList<Comment> = mutableListOf()
+
+)

@@ -14,7 +14,7 @@ class MovieDetail(
     val id: UUID = UUID.randomUUID(),
 
     @JsonIgnore
-    @OneToOne(mappedBy = "movieDetail")
+    @OneToOne(mappedBy = "movieDetail", fetch = FetchType.LAZY)
     val movie: Movie? = null,
 
     val adult: Boolean = true,

@@ -3,6 +3,7 @@ package com.housing.movie.features.movie.domain.entity
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.housing.movie.features.comment.domain.entity.Comment
 import com.housing.movie.features.common.entity.movie_person.MoviePerson
 import com.housing.movie.features.common.serializers.MovieSerializer
 import com.housing.movie.features.company.domain.Company
@@ -48,11 +49,16 @@ class Movie(
     @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_detail_id", referencedColumnName = "id")
     @JsonProperty(value = "movie_detail")
+    @JsonIgnore
     var movieDetail: MovieDetail? = null,
 
     @JsonIgnore
     @OneToMany(mappedBy = "movie")
     val episodes: MutableList<Episode> = mutableListOf(),
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    val comments: MutableList<Comment> = mutableListOf(),
 
     @JsonProperty(value = "movie_id_fake")
     var movieIdFake: String = "",

@@ -90,7 +90,7 @@ class MovieServiceImpl(
 
         val genres = genreRepository.getGenresByIdIsIn(createMovieRequest.genreIds)
 
-        val movie = Movie()
+        var movie = Movie()
 
         movie.id = createMovieRequest.id ?: movie.id
         movie.title = movieDetail.title
@@ -98,7 +98,7 @@ class MovieServiceImpl(
         movie.genres = movie.genres.plus(genres)
         movie.movieIdFake = movie.movieIdFake
 
-        movieRepository.save(movie)
+        movie = movieRepository.save(movie)
 
         return movie
     }
