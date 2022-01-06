@@ -1,6 +1,5 @@
 package com.housing.movie.config
 
-import com.auth0.jwt.algorithms.Algorithm
 import com.housing.movie.config.filter.CustomAuthenticationFilter
 import com.housing.movie.config.filter.CustomAuthorizationFilter
 import com.housing.movie.config.handlers.CustomAccessDeniedHandler
@@ -17,6 +16,10 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+
 
 /**
  * Configuration for security
@@ -80,5 +83,17 @@ class SecurityConfig(
     @Bean
     override fun authenticationManagerBean(): AuthenticationManager {
         return super.authenticationManagerBean()
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf("*")
+        configuration.allowedMethods = listOf("*")
+        configuration.allowedHeaders = listOf("*")
+        configuration.allowCredentials = true
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 }
