@@ -15,6 +15,8 @@ data class RegisterRequest(
     @NotBlank
     val password: String,
 
+    val fullname: String = "",
+
     @NotNull
     @Enumerated(value = EnumType.STRING)
     val role: Role = Role.Subscriber,
@@ -24,6 +26,7 @@ data class RegisterRequest(
         return ApplicationUser(
             username = username,
             password = password,
+            fullname = fullname,
             role = role
         )
     }

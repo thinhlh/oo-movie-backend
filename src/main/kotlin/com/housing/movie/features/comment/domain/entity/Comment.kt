@@ -55,6 +55,6 @@ class Comment(
 
     @JsonProperty(value = "user")
     fun getUserInfo(): UserInfo {
-        return UserInfo(user?.id, user?.username)
+        return UserInfo(user?.id, user?.fullname)
     }
 }

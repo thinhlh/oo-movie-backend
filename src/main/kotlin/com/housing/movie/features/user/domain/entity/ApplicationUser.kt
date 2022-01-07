@@ -20,6 +20,8 @@ class ApplicationUser(
     @Column(unique = true)
     var username: String = "",
 
+    var fullname: String = "",
+
     @NotBlank
     var password: String = "",
 
