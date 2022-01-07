@@ -36,16 +36,6 @@ class MovieSerializer(
         jsonGenerator?.let {
             jsonGenerator.writeStartObject()
 
-//            val genreIds: Array<String> =
-//                movie?.genres?.map { genre -> genre.id.toString() }?.toTypedArray() ?: emptyArray()
-//
-//            jsonGenerator.writeFieldName("genreIds")
-//            jsonGenerator.writeArray(genreIds, 0, genreIds.size)
-//
-//            jsonGenerator.writeFieldName("detail")
-//            defaultSerializer?.serialize(movie, jsonGenerator, serializerProvider)
-
-
             it.writeStringField("id", movie?.id.toString())
             it.writeObjectField("episodes", movie?.episodes)
             it.writeObjectField("genres", movie?.genres)

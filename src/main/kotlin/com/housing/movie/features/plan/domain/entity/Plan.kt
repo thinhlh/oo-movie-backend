@@ -1,9 +1,11 @@
 package com.housing.movie.features.plan.domain.entity
 
+import com.housing.movie.features.order.domain.entity.Order
 import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
+import javax.persistence.OneToMany
 
 @Entity
 class Plan(
@@ -12,6 +14,9 @@ class Plan(
     val id: UUID = UUID.randomUUID(),
     var title: String = "",
     var price: Double = 0.0,
+
+    @OneToMany(mappedBy = "plan")
+    val orders: MutableList<Order> = mutableListOf(),
 
     var enabled: Boolean = true
 )

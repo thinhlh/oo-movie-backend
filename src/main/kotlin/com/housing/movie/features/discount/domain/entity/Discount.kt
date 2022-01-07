@@ -1,6 +1,8 @@
 package com.housing.movie.features.discount.domain.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.housing.movie.features.order.domain.entity.Order
 import java.util.*
 import javax.persistence.*
 
@@ -14,7 +16,7 @@ class Discount(
 
     var description: String = "",
 
-    @JsonProperty(value="remaining_amount")
+    @JsonProperty(value = "remaining_amount")
     var remainingAmount: Int = 0,
 
     @Temporal(value = TemporalType.DATE)
@@ -24,6 +26,10 @@ class Discount(
     @Temporal(value = TemporalType.DATE)
     @JsonProperty(value = "time_end")
     var timeEnd: Calendar? = null,
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "discount", fetch = FetchType.LAZY)
+    val orders: MutableList<Order> = mutableListOf(),
 
     var value: Double = 0.0,
 

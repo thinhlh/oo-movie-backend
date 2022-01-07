@@ -49,7 +49,9 @@ object SecurityHelper {
                 to listOf(Role.Administrator),
 
         Pair("/ping/subscriber", listOf(HttpMethod.GET))
-                to listOf(Role.Subscriber)
+                to listOf(Role.Subscriber),
+
+        Pair("/docs", null) to null,
 
     )
 

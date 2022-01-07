@@ -36,6 +36,7 @@ class Comment(
     val time: Calendar = Calendar.getInstance(),
 
     @Enumerated(value = EnumType.STRING)
+    @JsonProperty(value = "status")
     var commentStatus: CommentStatus = CommentStatus.Pending,
 
     @Transient
@@ -46,4 +47,14 @@ class Comment(
     // Movie id property for json response
     @JsonProperty(value = "movie_id")
     fun getMovieId() = movie?.id
+
+    data class UserInfo(
+        val id: UUID?,
+        val name: String?
+    )
+
+    @JsonProperty(value = "user")
+    fun getUserInfo(): UserInfo {
+        return UserInfo(user?.id, user?.username)
+    }
 }

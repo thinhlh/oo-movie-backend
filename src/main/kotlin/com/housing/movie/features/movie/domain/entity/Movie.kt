@@ -9,6 +9,7 @@ import com.housing.movie.features.common.serializers.MovieSerializer
 import com.housing.movie.features.company.domain.Company
 import com.housing.movie.features.episode.domain.entity.Episode
 import com.housing.movie.features.genre.domain.entity.Genre
+import com.housing.movie.features.order.domain.entity.Order
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -62,6 +63,10 @@ class Movie(
 
     @JsonProperty(value = "movie_id_fake")
     var movieIdFake: String = "",
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "movies")
+    val orders: MutableList<Order> = mutableListOf(),
 
     var enabled: Boolean = true
 
