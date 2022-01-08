@@ -2,6 +2,7 @@ package com.housing.movie.features.comment.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.housing.movie.features.common.entity.extended_response.UserInfo
 import com.housing.movie.features.movie.domain.entity.Movie
 import com.housing.movie.features.user.domain.entity.ApplicationUser
 import java.time.Instant
@@ -47,11 +48,6 @@ class Comment(
     // Movie id property for json response
     @JsonProperty(value = "movie_id")
     fun getMovieId() = movie?.id
-
-    data class UserInfo(
-        val id: UUID?,
-        val name: String?
-    )
 
     @JsonProperty(value = "user")
     fun getUserInfo(): UserInfo {

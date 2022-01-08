@@ -1,6 +1,10 @@
 package com.housing.movie.features.order.domain.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.housing.movie.features.common.entity.extended_response.MovieInfo
+import com.housing.movie.features.common.entity.extended_response.PlanInfo
+import com.housing.movie.features.common.entity.extended_response.UserInfo
 import com.housing.movie.features.discount.domain.entity.Discount
 import com.housing.movie.features.genre.domain.entity.Genre
 import com.housing.movie.features.movie.domain.entity.Movie
@@ -37,11 +41,33 @@ class Order(
     )
     var movies: MutableList<Movie> = mutableListOf(),
 
-    val isPlan: Boolean = true,
-
+    @JsonProperty(value = "order_time")
     @Temporal(value = TemporalType.TIMESTAMP)
     val orderTime: Calendar = Calendar.getInstance(),
 
     var enabled: Boolean = true
 
-)
+) {
+
+    @JsonProperty(value = "movies")
+    fun getMoviesInfo(): List<MovieInfo> {
+        return movies.map { movie -> MovieInfo(movie.id, movie.title) }
+    }
+
+
+    @JsonProperty(value = "plan")
+    fun getPlanInfo(): PlanInfo? {
+        plan ?: return null
+        return PlanInfo(plan!!.id, plan!!.title)
+    }
+
+    @JsonProperty(value = "user")
+    fun getUserInfo(): UserInfo {
+        return UserInfo(user?.id, user?.fullname)
+    }
+
+    @JsonProperty(value = "is_plan")
+    fun getIsPlan(): Boolean {
+        return movies.isEmpty()
+    }
+}

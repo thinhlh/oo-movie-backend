@@ -12,4 +12,6 @@ interface UserRepository : CrudRepository<ApplicationUser, UUID> {
     fun findByUsernameAndEnabledIsTrue(username: String): ApplicationUser?
 
     fun existsByUsername(username: String): Boolean
+
+
 }

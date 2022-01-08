@@ -38,4 +38,13 @@ object DateTimeHelper {
 
         return simpleDateFormat.format(calendar.time)
     }
+
+    fun timeStampToCalendar(timestamp: Long?): Calendar? {
+        timestamp ?: return null
+
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = timestamp
+
+        return calendar
+    }
 }

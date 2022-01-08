@@ -11,4 +11,6 @@ interface MovieRepository : CrudRepository<Movie, UUID> {
 
     fun findMoviesByEnabledIsTrueAndGenresContaining(genre: Genre): List<Movie>
 
+    fun findByIdIsIn(ids: Collection<UUID>): List<Movie>
+
 }

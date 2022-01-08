@@ -6,7 +6,7 @@ import java.util.*
 data class OrderQueryParams(
     val user_id: UUID? = null,
 
-    val from_time: Calendar? = null,
+    val from_time: Long? = null,
 
-    val to_time: Calendar? = null
+    val to_time: Long? = null
 )

@@ -6,7 +6,13 @@ import java.util.*
 
 interface DiscountRepository : CrudRepository<Discount, UUID> {
 
-    fun getDiscountByCode(code:String): Discount?
+    fun getDiscountByCode(code: String): Discount?
 
+
+    fun findByCodeAndTimeEndIsAfterAndRemainingAmountIsGreaterThanAndEnabledIsTrue(
+        code: String,
+        timeEnd: Calendar,
+        remainingAmount: Int = 0
+    ): Discount?
 
 }

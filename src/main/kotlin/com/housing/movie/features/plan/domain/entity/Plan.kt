@@ -1,5 +1,6 @@
 package com.housing.movie.features.plan.domain.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.housing.movie.features.order.domain.entity.Order
 import java.util.*
 import javax.persistence.Entity
@@ -15,6 +16,7 @@ class Plan(
     var title: String = "",
     var price: Double = 0.0,
 
+    @JsonIgnore
     @OneToMany(mappedBy = "plan")
     val orders: MutableList<Order> = mutableListOf(),
 
