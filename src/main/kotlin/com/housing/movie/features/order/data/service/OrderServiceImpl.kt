@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Month
 import java.util.*
+import kotlin.math.roundToLong
 
 @Service
 class OrderServiceImpl(
@@ -42,6 +43,8 @@ class OrderServiceImpl(
         const val PLAN_NOT_FOUND = "Plan not found."
         const val DISCOUNT_NOT_FOUND = "Discount not found."
         const val DISCOUNT_INVALIDATE = "Discount is unable to be used at the moment."
+        const val ORDER_NOT_FOUND = "Order not found."
+        const val MOVIE_PRICE = 30000
     }
 
     override fun getOrdersUseCase(orderQueryParams: OrderQueryParams): List<Order> {
@@ -122,13 +125,14 @@ class OrderServiceImpl(
         val movies = validateMovies(movieIds)
         val plan = validatePlan(planId)
         val discount = validateDiscount(discountCode)
-        val isPlan = if (plan == null) false else true
+        val total = calculateOrderTotal(discount, plan, movies ?: emptyList())
 
         var order = Order(
             user = user,
             movies = movies?.toMutableList() ?: mutableListOf(),
             discount = discount,
             plan = plan,
+            total = total
         )
 
 
@@ -142,6 +146,27 @@ class OrderServiceImpl(
         return order
 
 
+    }
+
+    private fun calculateOrderTotal(discount: Discount?, plan: Plan?, movies: List<Movie>): Long {
+        val discountValue = discount?.value ?: 0.0
+        return if (plan != null) {
+            val basePrice = plan.price
+            val discountedPrice = basePrice - discountValue * basePrice
+            val finalPrice = if (discountedPrice < 0) 0.0 else discountValue
+
+            finalPrice.roundToLong()
+        } else {
+            val basePrice = movies.size * MOVIE_PRICE
+            val discountedPrice = basePrice - discountValue * basePrice
+            val finalPrice = if (discountedPrice < 0) 0.0 else discountValue
+
+            finalPrice.roundToLong()
+        }
+    }
+
+    override fun getOrderById(orderId: UUID): Order {
+        return orderRepository.findByIdOrNull(orderId) ?: throw NotFoundException(ORDER_NOT_FOUND)
     }
 
     private fun saveOrderToUser(user: ApplicationUser, order: Order) {
