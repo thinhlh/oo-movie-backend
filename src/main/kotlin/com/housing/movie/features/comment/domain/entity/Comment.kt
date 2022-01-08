@@ -50,7 +50,7 @@ class Comment(
     fun getMovieId() = movie?.id
 
     @JsonProperty(value = "user")
-    fun getUserInfo(): UserInfo {
-        return UserInfo(user?.id, user?.fullname)
+    fun getUserInfo(): UserInfo? {
+        return user?.toUserInfo()
     }
 }

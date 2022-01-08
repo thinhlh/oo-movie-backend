@@ -3,6 +3,7 @@ package com.housing.movie.features.user.domain.entity
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.housing.movie.features.comment.domain.entity.Comment
+import com.housing.movie.features.common.entity.extended_response.UserInfo
 import com.housing.movie.features.order.domain.entity.Order
 import java.util.*
 import javax.persistence.*
@@ -39,4 +40,8 @@ class ApplicationUser(
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     val orders: MutableList<Order> = mutableListOf()
 
-)
+) {
+    fun toUserInfo(): UserInfo {
+        return UserInfo(id, username, fullname)
+    }
+}

@@ -64,8 +64,8 @@ class Order(
     }
 
     @JsonProperty(value = "user")
-    fun getUserInfo(): UserInfo {
-        return UserInfo(user?.id, user?.fullname)
+    fun getUserInfo(): UserInfo? {
+        return user?.toUserInfo()
     }
 
     @JsonProperty(value = "is_plan")
