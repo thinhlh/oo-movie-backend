@@ -44,7 +44,7 @@ class Order(
     @Temporal(value = TemporalType.TIMESTAMP)
     val orderTime: Calendar = Calendar.getInstance(),
 
-    val total: Long? = 0,
+    val total: Double = 0.0,
 
     var enabled: Boolean = true
 
