@@ -45,7 +45,7 @@ data class UpdateMovieRequest(
     val title: String? = null,
 
     @JsonProperty(value = "vote_average")
-    val voteAverage: Long? = null,
+    val voteAverage: Double? = null,
 
     @JsonProperty(value = "vote_count")
     val voteCount: Long? = null,

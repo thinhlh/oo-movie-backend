@@ -38,9 +38,9 @@ data class CreateMovieRequest(
     val title: String,
 
     @JsonProperty(value = "vote_average")
-    val voteAverage: Long = 0,
+    val voteAverage: Double = 0.0,
 
-    @JsonProperty(value="vote_count")
+    @JsonProperty(value = "vote_count")
     val voteCount: Long = 0,
 
     @JsonProperty(value = "like_count")

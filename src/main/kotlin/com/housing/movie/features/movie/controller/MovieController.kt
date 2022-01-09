@@ -8,6 +8,8 @@ import com.housing.movie.features.movie.domain.usecase.assign_tags_to_movie.Assi
 import com.housing.movie.features.movie.domain.usecase.assign_tags_to_movie.AssignGenresToMovieRequest
 import com.housing.movie.features.movie.domain.usecase.create_movie.CreateMovieRequest
 import com.housing.movie.features.movie.domain.usecase.create_movie.CreateMovieUseCase
+import com.housing.movie.features.movie.domain.usecase.rating_movie.RatingMovieRequest
+import com.housing.movie.features.movie.domain.usecase.rating_movie.RatingMovieUseCase
 import com.housing.movie.features.movie.domain.usecase.update_movie.UpdateMovieRequest
 import com.housing.movie.features.movie.domain.usecase.update_movie.UpdateMovieUseCase
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -31,6 +33,7 @@ class MovieController(
     private val enableMovieUseCase: EnableMovieUseCase,
     private val createMovieUseCase: CreateMovieUseCase,
     private val updateMovieUseCase: UpdateMovieUseCase,
+    private val ratingMovieUseCase: RatingMovieUseCase,
 ) : BaseController() {
 
     @GetMapping("/movies")
@@ -87,5 +90,10 @@ class MovieController(
     @PutMapping("/movie")
     fun updateMovie(@RequestBody @Valid updateMovieRequest: UpdateMovieRequest): ResponseEntity<BaseResponse<Movie>> {
         return successResponse(updateMovieUseCase(updateMovieRequest))
+    }
+
+    @PostMapping("/movie/rating")
+    fun ratingMovie(@RequestBody @Valid ratingMovieRequest: RatingMovieRequest): ResponseEntity<BaseResponse<Double>> {
+        return successResponse(ratingMovieUseCase(ratingMovieRequest))
     }
 }

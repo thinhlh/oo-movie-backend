@@ -42,9 +42,9 @@ class MovieDetail(
     @NotBlank
     val title: String = "",
 
-    val voteAverage: Long = 0,
+    var voteAverage: Double = 0.0,
 
-    val voteCount: Long = 0,
+    var voteCount: Long = 0,
 
     val likeCount: Long = 0,
 

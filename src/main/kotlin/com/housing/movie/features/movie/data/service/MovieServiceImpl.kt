@@ -7,9 +7,9 @@ import com.housing.movie.features.genre.data.service.GenreServiceImpl
 import com.housing.movie.features.movie.data.repository.MovieDetailRepository
 import com.housing.movie.features.movie.data.repository.MovieRepository
 import com.housing.movie.features.movie.domain.entity.Movie
-import com.housing.movie.features.movie.domain.entity.MovieDetail
 import com.housing.movie.features.movie.domain.service.MovieService
 import com.housing.movie.features.movie.domain.usecase.create_movie.CreateMovieRequest
+import com.housing.movie.features.movie.domain.usecase.rating_movie.RatingMovieRequest
 import com.housing.movie.features.movie.domain.usecase.update_movie.UpdateMovieRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -122,5 +122,26 @@ class MovieServiceImpl(
         movieDetailRepository.save(newMovieDetail)
 
         return movie
+    }
+
+    override fun ratingMovie(ratingMovieRequest: RatingMovieRequest): Double {
+        val movieId = ratingMovieRequest.movieId
+        val voteValue = ratingMovieRequest.value
+
+        val movieDetail = movieDetailRepository.findByMovie_Id(movieId) ?: throw NotFoundException(MOVIE_NOT_FOUND)
+
+        // Calculate the total vote then plus the new vote value and get the average
+        val totalCurrentVoteValue = movieDetail.voteAverage * movieDetail.voteCount
+
+        movieDetail.voteCount += 1
+        movieDetail.voteAverage = (totalCurrentVoteValue + voteValue) / movieDetail.voteCount
+
+        movieDetailRepository.save(movieDetail)
+
+        return movieDetail.voteAverage
+    }
+
+    override fun topMovieRating(size: Int): List<UUID> {
+        return listOf()
     }
 }

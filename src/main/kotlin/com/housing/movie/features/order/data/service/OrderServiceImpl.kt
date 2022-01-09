@@ -21,7 +21,6 @@ import com.housing.movie.utils.DateTimeHelper
 import com.housing.movie.utils.ServletHelper
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.time.Month
 import java.util.*
 import kotlin.math.roundToLong
@@ -58,45 +57,63 @@ class OrderServiceImpl(
 
             if (fromTime == null && toTime == null) {
 
-                orders.addAll(orderRepository.findAll())
+                orders.addAll(orderRepository.findByOrderByOrderTimeDesc())
 
             } else if (fromTime == null) {
 
                 val startTime = Calendar.getInstance()
                 startTime.set(1990, Month.JANUARY.value, 1)
 
-                orders.addAll(orderRepository.findByOrderTimeBetween(startTime, toTime!!))
+                orders.addAll(orderRepository.findByOrderTimeBetweenOrderByOrderTimeDesc(startTime, toTime!!))
             } else if (toTime == null) {
 
                 val endTime = Calendar.getInstance()
 
-                orders.addAll(orderRepository.findByOrderTimeBetween(fromTime, endTime))
+                orders.addAll(orderRepository.findByOrderTimeBetweenOrderByOrderTimeDesc(fromTime, endTime))
             } else {
 
-                orders.addAll(orderRepository.findByOrderTimeBetween(fromTime, toTime))
+                orders.addAll(orderRepository.findByOrderTimeBetweenOrderByOrderTimeDesc(fromTime, toTime))
 
             }
         } else {
             if (fromTime == null && toTime == null) {
 
-                orders.addAll(orderRepository.findByUser_Id(userId))
+                orders.addAll(orderRepository.findByUser_IdOrderByOrderTimeDesc(userId))
 
             } else if (fromTime == null) {
 
                 val startTime = Calendar.getInstance()
                 startTime.set(1990, Month.JANUARY.value, 1)
 
-                orders.addAll(orderRepository.findByUser_IdIsAndOrderTimeBetween(userId, startTime, toTime!!))
+                orders.addAll(
+                    orderRepository.findByUser_IdAndOrderTimeBetweenOrderByOrderTimeDesc(
+                        userId,
+                        startTime,
+                        toTime!!
+                    )
+                )
 
             } else if (toTime == null) {
 
                 val endTime = Calendar.getInstance()
 
-                orders.addAll(orderRepository.findByUser_IdIsAndOrderTimeBetween(userId, fromTime, endTime))
+                orders.addAll(
+                    orderRepository.findByUser_IdAndOrderTimeBetweenOrderByOrderTimeDesc(
+                        userId,
+                        fromTime,
+                        endTime
+                    )
+                )
 
             } else {
 
-                orders.addAll(orderRepository.findByUser_IdIsAndOrderTimeBetween(userId, fromTime, toTime))
+                orders.addAll(
+                    orderRepository.findByUser_IdAndOrderTimeBetweenOrderByOrderTimeDesc(
+                        userId,
+                        fromTime,
+                        toTime
+                    )
+                )
 
             }
         }

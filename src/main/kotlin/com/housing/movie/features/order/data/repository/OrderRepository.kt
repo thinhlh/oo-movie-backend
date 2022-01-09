@@ -9,12 +9,17 @@ import java.util.*
 interface OrderRepository : CrudRepository<Order, UUID> {
 
 
-    fun findByUser_Id(id: UUID): List<Order>
+    fun findByOrderTimeBetweenOrderByOrderTimeDesc(orderTimeStart: Calendar, orderTimeEnd: Calendar): List<Order>
+
+    fun findByUser_IdOrderByOrderTimeDesc(id: UUID): List<Order>
+
+    fun findByUser_IdAndOrderTimeBetweenOrderByOrderTimeDesc(
+        id: UUID,
+        orderTimeStart: Calendar,
+        orderTimeEnd: Calendar
+    ): List<Order>
 
 
-    fun findByOrderTimeBetween(orderTimeStart: Calendar, orderTimeEnd: Calendar): List<Order>
-
-
-    fun findByUser_IdIsAndOrderTimeBetween(id: UUID, orderTimeStart: Calendar, orderTimeEnd: Calendar): List<Order>
+    fun findByOrderByOrderTimeDesc(): List<Order>
 
 }

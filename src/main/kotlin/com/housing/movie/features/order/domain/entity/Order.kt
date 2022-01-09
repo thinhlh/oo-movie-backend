@@ -24,7 +24,6 @@ class Order(
     @ManyToOne(fetch = FetchType.LAZY)
     var user: ApplicationUser? = null,
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     var discount: Discount? = null,
 
