@@ -56,6 +56,8 @@ class MovieSerializer(
             it.writeObjectField("vote_average", movieDetail?.voteAverage)
             it.writeObjectField("vote_count", movieDetail?.voteCount)
             it.writeObjectField("view_count", movieDetail?.viewCount)
+            it.writeStringField("trailer1", movieDetail?.trailer1)
+            it.writeStringField("trailer2", movieDetail?.trailer2)
             it.writeBooleanField("is_mine", movieDetail?.isMine ?: true)
             it.writeStringField("movie_id_fake", movie?.movieIdFake)
             it.writeBooleanField("is_tv_series", movieDetail?.isTVSeries ?: false)

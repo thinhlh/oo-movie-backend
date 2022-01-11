@@ -27,5 +27,5 @@ interface MovieService {
 
     fun ratingMovie(ratingMovieRequest: RatingMovieRequest): Double
 
-    fun topMovieRating(size: Int): List<UUID>
+    fun topMovieRating(size: Int): List<Movie?>
 }

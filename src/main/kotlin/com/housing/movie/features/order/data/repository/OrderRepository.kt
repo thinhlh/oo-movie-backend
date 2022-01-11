@@ -22,4 +22,10 @@ interface OrderRepository : CrudRepository<Order, UUID> {
 
     fun findByOrderByOrderTimeDesc(): List<Order>
 
+
+    fun findByPlan_IdAndOrderTimeBetween(planId: UUID, orderTimeStart: Calendar, orderTimeEnd: Calendar): List<Order>
+
+
+    fun findByPlan_Id(planId: UUID): List<Order>
+
 }

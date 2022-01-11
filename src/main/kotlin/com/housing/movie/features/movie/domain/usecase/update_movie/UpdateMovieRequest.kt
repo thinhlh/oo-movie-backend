@@ -56,6 +56,10 @@ data class UpdateMovieRequest(
     @JsonProperty(value = "view_count")
     val viewCount: Long? = null,
 
+    val trailer1: String? = null,
+
+    val trailer2: String? = null,
+
     @JsonProperty(value = "genre_ids")
     val genreIds: List<UUID>? = null,
 
@@ -77,6 +81,8 @@ data class UpdateMovieRequest(
                     originalLanguage = originalLanguage!!,
                     originalTitle = originalTitle!!,
                     overview = overview!!,
+                    trailer1 = trailer1!!,
+                    trailer2 = trailer2!!,
                     posterPath = posterPath!!,
                     releaseDate = DateTimeHelper.stringToCalendar(releaseDate),
                     revenue = revenue!!,
@@ -86,6 +92,7 @@ data class UpdateMovieRequest(
                     likeCount = likeCount!!,
                     viewCount = viewCount!!,
                     isTVSeries = isTVSeries!!
+
                 )
             }
         } catch (e: NullPointerException) {
@@ -102,6 +109,8 @@ data class UpdateMovieRequest(
             originalLanguage = originalLanguage ?: currentMovieDetail.originalLanguage,
             originalTitle = originalTitle ?: currentMovieDetail.originalTitle,
             overview = overview ?: currentMovieDetail.overview,
+            trailer1 = trailer1 ?: currentMovieDetail.trailer1,
+            trailer2 = trailer2 ?: currentMovieDetail.trailer2,
             posterPath = posterPath ?: currentMovieDetail.posterPath,
             releaseDate = DateTimeHelper.stringToCalendar(releaseDate) ?: currentMovieDetail.releaseDate,
             revenue = revenue ?: currentMovieDetail.revenue,

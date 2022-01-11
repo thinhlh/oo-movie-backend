@@ -11,6 +11,7 @@ import com.housing.movie.features.movie.domain.service.MovieService
 import com.housing.movie.features.movie.domain.usecase.create_movie.CreateMovieRequest
 import com.housing.movie.features.movie.domain.usecase.rating_movie.RatingMovieRequest
 import com.housing.movie.features.movie.domain.usecase.update_movie.UpdateMovieRequest
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -96,7 +97,7 @@ class MovieServiceImpl(
         movie.title = movieDetail.title
         movie.movieDetail = movieDetail
         movie.genres = movie.genres.plus(genres)
-        movie.movieIdFake = movie.movieIdFake
+        movie.movieIdFake = createMovieRequest.movieIdFake
 
         movie = movieRepository.save(movie)
 
@@ -141,7 +142,7 @@ class MovieServiceImpl(
         return movieDetail.voteAverage
     }
 
-    override fun topMovieRating(size: Int): List<UUID> {
-        return listOf()
+    override fun topMovieRating(size: Int): List<Movie?> {
+        return movieDetailRepository.findByOrderByVoteAverageDesc(Pageable.ofSize(size)).map { it.movie }
     }
 }

@@ -53,6 +53,10 @@ object SecurityHelper {
 
         Pair("/docs", null) to null,
 
+        Pair("/movies/**", listOf(HttpMethod.GET)) to null,
+
+        Pair("/movie", listOf(HttpMethod.GET)) to null
+
     )
 
     /*

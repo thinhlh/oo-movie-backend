@@ -52,6 +52,10 @@ data class CreateMovieRequest(
     @JsonProperty(value = "genre_ids")
     val genreIds: List<UUID> = mutableListOf(),
 
+    val trailer1: String = "",
+
+    val trailer2: String = "",
+
     @JsonProperty(value = "movie_id_fake")
     val movieIdFake: String = "",
 
@@ -76,7 +80,9 @@ data class CreateMovieRequest(
             voteCount = voteCount,
             likeCount = likeCount,
             viewCount = viewCount,
-            isTVSeries = isTVSeries
+            isTVSeries = isTVSeries,
+            trailer1 = trailer1,
+            trailer2 = trailer2,
         )
     }
 }

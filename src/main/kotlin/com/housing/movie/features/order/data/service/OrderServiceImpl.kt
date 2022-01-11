@@ -169,13 +169,13 @@ class OrderServiceImpl(
         val discountValue = discount?.value ?: 0.0
         return if (plan != null) {
             val basePrice = plan.price
-            val discountedPrice = basePrice - discountValue * basePrice
+            val discountedPrice = basePrice - (discountValue * basePrice) / 100
             val finalPrice = if (discountedPrice < 0) 0.0 else discountValue
 
             round(finalPrice)
         } else {
             val basePrice = movies.size * MOVIE_PRICE
-            val discountedPrice = basePrice - discountValue * basePrice
+            val discountedPrice = basePrice - (discountValue * basePrice) / 100
             val finalPrice = if (discountedPrice < 0) 0.0 else discountValue
 
             round(finalPrice)

@@ -12,6 +12,7 @@ import com.housing.movie.features.movie.domain.usecase.rating_movie.RatingMovieR
 import com.housing.movie.features.movie.domain.usecase.rating_movie.RatingMovieUseCase
 import com.housing.movie.features.movie.domain.usecase.update_movie.UpdateMovieRequest
 import com.housing.movie.features.movie.domain.usecase.update_movie.UpdateMovieUseCase
+import com.housing.movie.features.statistic.domain.usecase.TopMovieRatingUseCase
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag

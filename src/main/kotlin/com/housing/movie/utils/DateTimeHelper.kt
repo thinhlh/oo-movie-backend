@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 object DateTimeHelper {
     object Format {
         const val DD_MM_YYYY = "dd/MM/yyyy"
+        const val DD__MM__YYYY = "dd-MM-yyyy"
         const val YYYY_MM_DD = "yyyy/MM/dd"
         const val HH_MM = "HH:mm"
     }

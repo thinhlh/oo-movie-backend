@@ -53,6 +53,10 @@ class MovieDetail(
     @Column(name = "is_tv_series")
     var isTVSeries: Boolean = false,
 
+    var trailer1: String = "",
+
+    var trailer2: String = "",
+
     @Transient
     val isMine: Boolean = true
 )
