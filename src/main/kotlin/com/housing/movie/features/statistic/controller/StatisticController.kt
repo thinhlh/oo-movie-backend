@@ -9,10 +9,8 @@ import com.housing.movie.features.statistic.domain.usecase.top_purchase_plan.Top
 import com.housing.movie.features.statistic.domain.usecase.top_purchase_plan.TopPurchasePlanUseCase
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import javax.validation.Valid
 
 @RestController
 class StatisticController(
