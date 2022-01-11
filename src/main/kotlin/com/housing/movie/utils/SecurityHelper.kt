@@ -57,9 +57,11 @@ object SecurityHelper {
 
         Pair("/movie", listOf(HttpMethod.GET)) to null,
 
-        Pair("/plans", listOf(HttpMethod.GET)) to null
+        Pair("/plans", listOf(HttpMethod.GET)) to null,
 
-    )
+        Pair("/comments", listOf(HttpMethod.GET)) to null,
+
+        )
 
     /*
     * Authenticate when user call api

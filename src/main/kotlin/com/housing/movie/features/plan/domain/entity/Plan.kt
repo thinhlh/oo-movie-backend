@@ -19,6 +19,8 @@ class Plan(
     @JsonIgnore
     @OneToMany(mappedBy = "plan")
     val orders: MutableList<Order> = mutableListOf(),
+//
+//    val description: MutableList<String> = mutableListOf(),
 
     var enabled: Boolean = true
 )
