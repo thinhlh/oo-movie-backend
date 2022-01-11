@@ -61,7 +61,11 @@ object SecurityHelper {
 
         Pair("/comments", listOf(HttpMethod.GET)) to null,
 
-        )
+        Pair("/comment", listOf(HttpMethod.PUT)) to listOf(Role.Administrator),
+
+        Pair("/comment", listOf(HttpMethod.POST)) to listOf(Role.Subscriber)
+
+    )
 
     /*
     * Authenticate when user call api

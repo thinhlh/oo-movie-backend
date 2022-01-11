@@ -54,15 +54,16 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        SecurityHelper.authenticate(request, response) { authResult ->
-            // Tell the spring that this the the valid authentication
-            SecurityContextHolder.getContext().authentication = authResult
-            filterChain.doFilter(request, response)
-        }
-    }
 
-    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        return filterIgnorePaths(request)
+        if (filterIgnorePaths(request)) {
+            filterChain.doFilter(request, response)
+        } else {
+            SecurityHelper.authenticate(request, response) { authResult ->
+                // Tell the spring that this the the valid authentication
+                SecurityContextHolder.getContext().authentication = authResult
+                filterChain.doFilter(request, response)
+            }
+        }
     }
 
     // This path is not contained in ignored token paths
