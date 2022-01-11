@@ -13,6 +13,7 @@ import com.housing.movie.features.order.domain.entity.Order
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
+import kotlin.jvm.Transient
 
 
 @Entity
@@ -68,6 +69,8 @@ class Movie(
     @ManyToMany(mappedBy = "movies")
     val orders: MutableList<Order> = mutableListOf(),
 
-    var enabled: Boolean = true
+    var enabled: Boolean = true,
 
+    @Transient
+    val price: Double = 3.0
 )

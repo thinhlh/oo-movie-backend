@@ -43,7 +43,6 @@ class OrderServiceImpl(
         const val DISCOUNT_NOT_FOUND = "Discount not found."
         const val DISCOUNT_INVALIDATE = "Discount is unable to be used at the moment."
         const val ORDER_NOT_FOUND = "Order not found."
-        const val MOVIE_PRICE = 3
     }
 
     override fun getOrdersUseCase(orderQueryParams: OrderQueryParams): List<Order> {
@@ -174,7 +173,7 @@ class OrderServiceImpl(
 
             round(finalPrice)
         } else {
-            val basePrice = movies.size * MOVIE_PRICE
+            val basePrice = movies.size * (movies.firstOrNull() ?: Movie()).price
             val discountedPrice = basePrice - (discountValue * basePrice) / 100
             val finalPrice = if (discountedPrice < 0) 0.0 else discountValue
 

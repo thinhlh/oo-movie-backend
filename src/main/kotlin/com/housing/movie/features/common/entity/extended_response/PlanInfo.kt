@@ -4,5 +4,6 @@ import java.util.*
 
 data class PlanInfo(
     val id: UUID?,
-    val name: String
+    val name: String?,
+    val price: Double?,
 )

@@ -52,14 +52,14 @@ class Order(
 
     @JsonProperty(value = "movies")
     fun getMoviesInfo(): List<MovieInfo> {
-        return movies.map { movie -> MovieInfo(movie.id, movie.title) }
+        return movies.map { movie -> MovieInfo(movie.id, movie.title, movie.price) }
     }
 
 
     @JsonProperty(value = "plan")
     fun getPlanInfo(): PlanInfo? {
         plan ?: return null
-        return PlanInfo(plan!!.id, plan!!.title)
+        return PlanInfo(plan!!.id, plan!!.title, plan!!.price)
     }
 
     @JsonProperty(value = "user")
