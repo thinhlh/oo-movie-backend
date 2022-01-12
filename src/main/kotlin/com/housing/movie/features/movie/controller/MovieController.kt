@@ -97,4 +97,9 @@ class MovieController(
     fun ratingMovie(@RequestBody @Valid ratingMovieRequest: RatingMovieRequest): ResponseEntity<BaseResponse<Double>> {
         return successResponse(ratingMovieUseCase(ratingMovieRequest))
     }
+
+    @GetMapping("/movie/eligible")
+    fun isUserEligibleToViewMovie(@RequestBody @Valid movieId: UUID): ResponseEntity<BaseResponse<Boolean>> {
+        return successResponse(true)
+    }
 }
