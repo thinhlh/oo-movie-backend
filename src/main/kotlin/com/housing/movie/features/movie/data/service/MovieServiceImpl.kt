@@ -1,5 +1,6 @@
 package com.housing.movie.features.movie.data.service
 
+import com.housing.movie.exceptions.CustomAuthenticationException
 import com.housing.movie.exceptions.NotFoundException
 import com.housing.movie.exceptions.ObjectDisabledException
 import com.housing.movie.features.genre.data.repository.GenreRepository
@@ -11,6 +12,9 @@ import com.housing.movie.features.movie.domain.service.MovieService
 import com.housing.movie.features.movie.domain.usecase.create_movie.CreateMovieRequest
 import com.housing.movie.features.movie.domain.usecase.rating_movie.RatingMovieRequest
 import com.housing.movie.features.movie.domain.usecase.update_movie.UpdateMovieRequest
+import com.housing.movie.features.order.data.repository.OrderRepository
+import com.housing.movie.features.user.data.repository.UserRepository
+import com.housing.movie.utils.ServletHelper
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -22,6 +26,7 @@ class MovieServiceImpl(
     private val movieRepository: MovieRepository,
     private val genreRepository: GenreRepository,
     private val movieDetailRepository: MovieDetailRepository,
+    private val orderRepository: OrderRepository,
 ) : MovieService {
 
     companion object {
@@ -145,4 +150,41 @@ class MovieServiceImpl(
     override fun topMovieRating(size: Int): List<Movie?> {
         return movieDetailRepository.findByOrderByVoteAverageDesc(Pageable.ofSize(size)).map { it.movie }
     }
+
+    override fun isMovieEligibleForUser(movieId: UUID): Boolean {
+
+        if (!movieRepository.existsById(movieId)) throw NotFoundException(MOVIE_NOT_FOUND)
+
+        val username = ServletHelper.retrieveUsernameAndRoles {
+            throw CustomAuthenticationException()
+        }.first
+
+        /**
+         * Iterate through user's orders
+         * If order is plan -> check if plan is expired | expired -> check another plan, NOT expired -> eligible
+         * If order is movie -> check if the movies contain movie id | contains -> eligible, NOT contains -> check next order
+         * */
+
+        val orders = orderRepository.findByUser_Username(username)
+
+        if (orders.isEmpty()) return false
+        else {
+            orders.forEach { order ->
+                if (order.plan != null) {
+                    val expiredDay = order.orderTime
+                    expiredDay.add(Calendar.DATE, order.plan!!.expired)
+
+                    if (!expiredDay.before(Calendar.getInstance())) {
+                        return true
+                    }
+                } else {
+                    if (order.movies.any { movie -> movie.id == movieId }) {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
+    }
+
 }

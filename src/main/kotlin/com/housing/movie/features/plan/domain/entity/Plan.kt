@@ -22,5 +22,7 @@ class Plan(
 
     var description: String = "",
 
-    var enabled: Boolean = true
+    var expired: Int = 10,
+
+    var enabled: Boolean = true,
 )

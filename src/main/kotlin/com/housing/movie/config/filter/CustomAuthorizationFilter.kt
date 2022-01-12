@@ -47,8 +47,6 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
         }.keys.toList().onEach { pathAndMethods ->
             ignoreTokenPaths.putIfAbsent(pathAndMethods.first, pathAndMethods.second)
         }
-
-        pathsSetup
     }
 
     override fun doFilterInternal(

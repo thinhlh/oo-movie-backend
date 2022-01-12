@@ -35,6 +35,7 @@ class MovieController(
     private val createMovieUseCase: CreateMovieUseCase,
     private val updateMovieUseCase: UpdateMovieUseCase,
     private val ratingMovieUseCase: RatingMovieUseCase,
+    private val isMovieEligibleForUserUseCase: IsMovieEligibleForUserUseCase,
 ) : BaseController() {
 
     @GetMapping("/movies")
@@ -99,7 +100,7 @@ class MovieController(
     }
 
     @GetMapping("/movie/eligible")
-    fun isUserEligibleToViewMovie(@RequestBody @Valid movieId: UUID): ResponseEntity<BaseResponse<Boolean>> {
-        return successResponse(true)
+    fun isUserEligibleToViewMovie(@RequestParam(value = "movie_id") @Valid movieId: UUID): ResponseEntity<BaseResponse<Boolean>> {
+        return successResponse(isMovieEligibleForUserUseCase(movieId))
     }
 }

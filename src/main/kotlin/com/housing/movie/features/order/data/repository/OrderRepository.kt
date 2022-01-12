@@ -28,4 +28,7 @@ interface OrderRepository : CrudRepository<Order, UUID> {
 
     fun findByPlan_Id(planId: UUID): List<Order>
 
+
+    fun findByUser_Username(username: String): List<Order>
+
 }

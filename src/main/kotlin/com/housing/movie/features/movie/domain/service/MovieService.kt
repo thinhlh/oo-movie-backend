@@ -28,4 +28,6 @@ interface MovieService {
     fun ratingMovie(ratingMovieRequest: RatingMovieRequest): Double
 
     fun topMovieRating(size: Int): List<Movie?>
+
+    fun isMovieEligibleForUser(movieId: UUID): Boolean
 }

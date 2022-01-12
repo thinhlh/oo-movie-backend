@@ -12,12 +12,15 @@ data class UpdatePlanRequest(
 
     val title: String? = null,
 
-    val description: String? = null
+    val description: String? = null,
+
+    val expired: Int? = null
 ) {
     fun updatePlan(oldPlan: Plan): Plan {
         oldPlan.price = price ?: oldPlan.price
         oldPlan.title = title ?: oldPlan.title
         oldPlan.description = description ?: oldPlan.description
+        oldPlan.expired = expired ?: oldPlan.expired
 
         return oldPlan
     }
