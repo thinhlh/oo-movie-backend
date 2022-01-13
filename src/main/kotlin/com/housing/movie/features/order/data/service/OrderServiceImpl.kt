@@ -1,9 +1,6 @@
 package com.housing.movie.features.order.data.service
 
-import com.housing.movie.exceptions.ConversionException
-import com.housing.movie.exceptions.CustomAuthenticationException
-import com.housing.movie.exceptions.MissingPropertyException
-import com.housing.movie.exceptions.NotFoundException
+import com.housing.movie.exceptions.*
 import com.housing.movie.features.discount.data.repository.DiscountRepository
 import com.housing.movie.features.discount.domain.entity.Discount
 import com.housing.movie.features.movie.data.repository.MovieRepository
@@ -43,6 +40,8 @@ class OrderServiceImpl(
         const val DISCOUNT_NOT_FOUND = "Discount not found."
         const val DISCOUNT_INVALIDATE = "Discount is unable to be used at the moment."
         const val ORDER_NOT_FOUND = "Order not found."
+        const val USER_ALREADY_PURCHASED_PLAN = "User have already enrolled a plan."
+        const val MOVIE_ALREADY_PURCHASED = "Movie already purchased: %s"
     }
 
     override fun getOrdersUseCase(orderQueryParams: OrderQueryParams): List<Order> {
@@ -138,8 +137,8 @@ class OrderServiceImpl(
             throw ConversionException(MOVIES_AND_PLAN_CANNOT_EXISTS_AT_THE_SAME_TIME)
         }
 
-        val movies = validateMovies(movieIds)
-        val plan = validatePlan(planId)
+        val movies = validateMovies(movieIds, username)
+        val plan = validatePlan(planId, username)
         val discount = validateDiscount(discountCode)
         val total = calculateOrderTotal(discount, plan, movies ?: emptyList())
 
@@ -225,21 +224,64 @@ class OrderServiceImpl(
         return userRepository.findByUsername(username = username) ?: throw  NotFoundException(USER_NOT_FOUND)
     }
 
-    private fun validateMovies(movieIds: List<UUID>?): List<Movie>? {
+    private fun validateMovies(movieIds: List<UUID>?, username: String): List<Movie>? {
         movieIds ?: return null
 
-        val movies = movieRepository.findByIdIsIn(movieIds)
+        if (!isMovieAlreadyPurchased(movieIds, username)) {
+            val movies = movieRepository.findByIdIsIn(movieIds)
 
-        if (movies.isEmpty())
-            throw NotFoundException(MOVIE_NOT_FOUND)
+            if (movies.isEmpty())
+                throw NotFoundException(MOVIE_NOT_FOUND)
 
-        return movies
+            return movies
+        }
+
+        return emptyList()
     }
 
-    private fun validatePlan(planId: UUID?): Plan? {
+    private fun isMovieAlreadyPurchased(movieIds: List<UUID>, username: String): Boolean {
+        val ordersWithMovies = orderRepository.findByUser_UsernameAndMoviesIsNotEmptyOrderByOrderTimeDesc(username)
+
+        val purchasedMoviesIds = mutableListOf<UUID>()
+
+        ordersWithMovies.forEach { order ->
+            purchasedMoviesIds.addAll(order.movies.map { it.id })
+        }
+
+        val overlapMovieIds = purchasedMoviesIds.intersect(movieIds)
+
+        // The intersection between purchased movie ids and willing to purchase movieIds is the overlapping movie
+        if (overlapMovieIds.isNotEmpty()) {
+            throw ObjectAlreadyExistsException(
+                MOVIE_ALREADY_PURCHASED.format(
+                    overlapMovieIds.joinToString(separator = ",") { it.toString() },
+                )
+            )
+        } else {
+            return false
+        }
+    }
+
+    private fun validatePlan(planId: UUID?, username: String): Plan? {
         planId ?: return null
 
+        if (isUserAlreadyEnrolledAnyInExpiredPlan(username)) throw ObjectAlreadyExistsException(
+            USER_ALREADY_PURCHASED_PLAN
+        )
+
         return planRepository.findByIdOrNull(planId) ?: throw NotFoundException(PLAN_NOT_FOUND)
+    }
+
+    // If user already enrolled in a plan that has not expired yet -> false
+    private fun isUserAlreadyEnrolledAnyInExpiredPlan(username: String): Boolean {
+        val orders = orderRepository.findByUser_UsernameAndPlanIsNotNullOrderByOrderTimeDesc(username)
+
+        return orders.any { order ->
+            val expiredDate = order.orderTime
+            expiredDate.add(Calendar.DATE, order.plan?.expired ?: 0)
+
+            expiredDate.after(Calendar.getInstance())
+        }
     }
 
     private fun validateDiscount(discountCode: String?): Discount? {

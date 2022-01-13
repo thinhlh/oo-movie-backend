@@ -65,7 +65,11 @@ object SecurityHelper {
 
         Pair("/comment", listOf(HttpMethod.PUT)) to listOf(Role.Administrator),
 
-        Pair("/comment", listOf(HttpMethod.POST)) to listOf(Role.Subscriber)
+        Pair("/comment", listOf(HttpMethod.POST)) to listOf(Role.Subscriber),
+
+        Pair("/purchased/movies", listOf(HttpMethod.GET)) to listOf(Role.Subscriber),
+
+        Pair("/purchased/plan", listOf(HttpMethod.GET)) to listOf(Role.Subscriber)
 
     )
 

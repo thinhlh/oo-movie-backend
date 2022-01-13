@@ -36,6 +36,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  * @exception ObjectAlreadyExistsException
  * @exception ObjectDisabledException
  * @exception ResourceHandlingException
+ * @exception SuccessIsFalseException
  * @exception TypeMismatchException
  * @exception RunOutOfUsageException
  * @exception UnknownException
@@ -181,6 +182,16 @@ class CustomResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
         val errorResponse = BaseResponse.error(exception.message.toString())
 
         return ResponseEntity(errorResponse, HttpStatus.GONE)
+    }
+
+    @ExceptionHandler(SuccessIsFalseException::class)
+    private fun handleSuccessIsFalseException(
+        exception: SuccessIsFalseException,
+        request: WebRequest
+    ): ResponseEntity<BaseResponse<String>> {
+        val errorResponse = BaseResponse.error(exception.message)
+
+        return ResponseEntity.ok(errorResponse)
     }
 
     override fun handleTypeMismatch(

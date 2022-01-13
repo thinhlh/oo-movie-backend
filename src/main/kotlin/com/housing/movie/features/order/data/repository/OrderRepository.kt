@@ -1,6 +1,7 @@
 package com.housing.movie.features.order.data.repository
 
 import com.housing.movie.features.order.domain.entity.Order
+import org.springframework.data.domain.Sort
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 import java.util.*
@@ -30,5 +31,15 @@ interface OrderRepository : CrudRepository<Order, UUID> {
 
 
     fun findByUser_Username(username: String): List<Order>
+
+    fun findByUser_UsernameAndPlanIsNotNullOrderByOrderTimeDesc(username: String): List<Order>
+
+
+    fun findByUser_UsernameAndMoviesIsNotEmptyOrderByOrderTimeDesc(username: String): List<Order>
+
+    fun findByUser_UsernameAndMoviesIsNotEmptyAndMovies_IdIsInOrderByOrderTimeDesc(
+        username: String,
+        movieIds: List<UUID>
+    ): List<Order>
 
 }
