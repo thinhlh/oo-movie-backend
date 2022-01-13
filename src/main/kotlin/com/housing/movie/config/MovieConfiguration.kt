@@ -16,8 +16,8 @@ import java.io.FileInputStream
 class MovieConfiguration {
     @Bean
     fun initMovies(movieRepository: MovieRepository, planRepository: PlanRepository) = CommandLineRunner { args ->
-//        planRepository.save(Plan(title = "1 thang", price = 3.0, expired = 30, description = "1 thang xem tat ca"))
-//        planRepository.save(Plan(title = "2 thang", price = 6.0, expired = 60, description = "2 thang xem tat ca"))
-//        planRepository.save(Plan(title = "3 thang", price = 9.0, expired = 90, description = "3 thang xem tat ca"))
+        planRepository.save(Plan(title = "1 thang", price = 3.0, expired = 30, description = "1 thang xem tat ca"))
+        planRepository.save(Plan(title = "2 thang", price = 6.0, expired = 60, description = "2 thang xem tat ca"))
+        planRepository.save(Plan(title = "3 thang", price = 9.0, expired = 90, description = "3 thang xem tat ca"))
     }
 }
