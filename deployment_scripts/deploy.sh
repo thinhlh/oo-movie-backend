@@ -34,16 +34,16 @@ echo '''
     '''
 # Copy execute_commands_on_ec2.sh file which has commands to be executed on server... Here we are copying this file
 # every time to automate this process through 'deploy.sh' so that whenever that file changes, it's taken care of
-scp -i "./deployment/aws-oomovie.pem" ./deployment/execute_commands_on_ec2.sh ec2-user@ec2-13-251-81-100.ap-southeast-1.compute.amazonaws.com:/home/ec2-user/server
+scp -i "./deployment_scripts/key.pem" ./deployment/execute_commands_on_ec2.sh ec2-user@ec2-13-251-81-100.ap-southeast-1.compute.amazonaws.com:/home/ec2-user/server
 echo "Copied latest 'execute_commands_on_ec2.sh' file from local machine to ec2 instance"
 
-scp -i "./deployment/aws-oomovie.pem" ./target/Movie-${version}-SNAPSHOT.jar ec2-user@ec2-13-251-81-100.ap-southeast-1.compute.amazonaws.com:/home/ec2-user/server
+scp -i "./deployment_scripts/key.pem" ./target/Movie-${version}-SNAPSHOT.jar ec2-user@ec2-13-251-81-100.ap-southeast-1.compute.amazonaws.com:/home/ec2-user/server
 echo "Copied jar file from local machine to ec2 instance"
 
 # Limited the permission and public of file
-chmod 400 ./deployment/aws-oomovie.pem
+chmod 400 ./deployment_scripts/key.pem
 echo "Changed the publicy of key"
 
 echo "Connecting to ec2 instance and starting server using java -jar command"
-ssh -i "./deployment/aws-oomovie.pem" -o StrictHostKeyChecking=no ec2-user@ec2-13-251-81-100.ap-southeast-1.compute.amazonaws.com ./server/execute_commands_on_ec2.sh "./server/Movie-${version}-SNAPSHOT.jar"
+ssh -i "./deployment_scripts/key.pem" -o StrictHostKeyChecking=no ec2-user@ec2-13-251-81-100.ap-southeast-1.compute.amazonaws.com ./server/execute_commands_on_ec2.sh "./server/Movie-${version}-SNAPSHOT.jar"
 echo "============ Connecting to ec2 instance succeed ============"
